@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.API", "Motoca.API\Motoca.API.csproj", "{562943CA-6E6A-4546-B502-ED61FCD6CA37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.SharedKernel", "Motoca.SharedKernel\Motoca.SharedKernel.csproj", "{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{562943CA-6E6A-4546-B502-ED61FCD6CA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{562943CA-6E6A-4546-B502-ED61FCD6CA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{562943CA-6E6A-4546-B502-ED61FCD6CA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{562943CA-6E6A-4546-B502-ED61FCD6CA37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
