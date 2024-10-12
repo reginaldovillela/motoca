@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 
 namespace Motoca.API.Endpoints;
 
+#pragma warning disable 1591
 public static class RidersEndpoints
 {
     private const string TagEndpoint = "Entregadores";
     private const string BaseEndpoint = "entregadores";
 
-    public static void MapRidersEndpoints(this WebApplication app)
+    public static void MapRidersEndpoints(this IEndpointRouteBuilder app)
     {
-        var baseEndpoint = app.MapGroup(BaseEndpoint)
-                              .WithTags(TagEndpoint);
+        var api = app.MapGroup(BaseEndpoint)
+                     .WithTags(TagEndpoint);
 
         // baseEndpoint.MapGet("/", () =>
         // {
@@ -25,15 +26,12 @@ public static class RidersEndpoints
         //     return id;
         // });
 
-        baseEndpoint.MapPost("/", () =>
+        api.MapPost("/", () =>
         {
             return "";
-        })
-        .WithDescription("TESTE")
-        .WithDisplayName("ttetetet")
-        .WithOpenApi();
+        });
 
-        baseEndpoint.MapPost("/{id}/cnh", (int id) =>
+        api.MapPost("/{id}/cnh", (int id) =>
         {
             return id;
 

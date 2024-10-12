@@ -1,45 +1,30 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Motoca.API.Endpoints;
 
+#pragma warning disable 1591
 public static class RentalsEndpoints
 {
     private const string TagEndpoint = "Locações";
     private const string BaseEndpoint = "locacoes";
 
-    public static void MapRentalsEndpoints(this WebApplication app)
+    public static void MapRentalsEndpoints(this IEndpointRouteBuilder app)
     {
-        var baseEndpoint = app.MapGroup(BaseEndpoint)
-                              .WithTags(TagEndpoint);
+        var api = app.MapGroup(BaseEndpoint)
+                     .WithTags(TagEndpoint);
 
-        // baseEndpoint.MapGet("/", () =>
-        // {
-
-        //     return "";
-        // });
-
-        baseEndpoint.MapGet("/{id}", (int id) =>
+        api.MapGet("/{id}", (int id) =>
         {
             return id;
         });
 
-        baseEndpoint.MapPost("/", () =>
+        api.MapPost("/", () =>
         {
             return "";
         });
 
-        baseEndpoint.MapPut("/{id}/devolucao", (int id) =>
+        api.MapPut("/{id}/devolucao", (int id) =>
         {
             return id;
 
         });
-
-        // baseEndpoint.MapDelete("/{id}", (int id) =>
-        // {
-        //     return id;
-        // });
     }
 }
