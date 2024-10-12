@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Motoca.API.Application.Riders.Commands;
+using Motoca.API.Application.Riders.Models;
 
 namespace Motoca.API.Endpoints;
 
@@ -21,52 +23,55 @@ public static class RidersEndpoints
         var api = app.MapGroup(BaseEndpoint)
                      .WithTags(TagEndpoint);
 
-        // baseEndpoint.MapGet("/", () =>
-        // {
-        //     return "";
-        // });
+        api.MapPost("/", CreateRiderAsync);
 
-        // baseEndpoint.MapGet("/{id}", (int id) =>
-        // {
-        //     return id;
-        // });
-
-        api.MapPost("/", () =>
-        {
-            return "";
-        });
-
-        api.MapPost("/{id}/cnh", (int id) =>
-        {
-            return id;
-
-        });
-
-        // baseEndpoint.MapDelete("/{id}", (int id) =>
-        // {
-        //     return id;
-        // });
+        api.MapPost("/{id}/cnh", UpdateDriversLicenseRiderAsync);
     }
 
-    // /// <summary>
-    // /// Consulta uma moto cadastrada pelo Id (Identificador)
-    // /// </summary>
-    // /// <param name="id">Id da moto</param>
-    // /// <param name="services"></param>
-    // private static async Task<Results<Created<Rental[]>, BadRequest<string>>> GetRentalByIdAsync(
-    //    [FromRoute(Name = "id")] string id,
-    //    [AsParameters] RentalsEndpointsServices services)
-    // {
-    //     try
-    //     {
-    //         var query = new GetRentalByIdQuery(id);
-    //         var rentals = await services.Mediator.Send(query);
+    /// <summary>
+    /// Cadastra uma moto no sistema
+    /// </summary>
+    /// <param name="command">Dados da moto para cadastrar</param>
+    /// <param name="services"></param>
+    private static async Task<Results<Created<Rider>, BadRequest<string>>> CreateRiderAsync(
+        [FromBody] CreateRiderCommand command,
+        [AsParameters] RidersEndpointsServices services)
+    {
+        try
+        {
+            var rental = await services.Mediator.Send(command);
 
-    //         return TypedResults.Created(string.Empty, rentals);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return TypedResults.BadRequest(ex.Message);
-    //     }
-    // }
+            return TypedResults.Created(string.Empty, rental);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Altera a placa de uma moto cadastrada no sistema pelo Id (Identificador)
+    /// </summary>
+    /// <param name="id">Id da moto</param>
+    /// <param name="command">Dados da nova placa</param>
+    /// <param name="services"></param>
+    private static async Task<Results<Ok<string>, BadRequest<string>>> UpdateDriversLicenseRiderAsync(
+        [FromRoute(Name = "id")] string id,
+        [FromBody] UpdateDriversLicenseRiderCommand command,
+        [AsParameters] RidersEndpointsServices services)
+    {
+        try
+        {
+            //command.Id = id;
+
+            var rental = await services.Mediator.Send(command);
+
+            return TypedResults.Ok("");
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(ex.Message);
+        }
+    }
+
 }

@@ -80,7 +80,7 @@ public static class RentalsEndpoints
     /// <param name="id">Id da moto</param>
     /// <param name="command">Dados da nova placa</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Rental>, BadRequest<string>>> EndRentalAsync(
+    private static async Task<Results<Ok<string>, BadRequest<string>>> EndRentalAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] EndRentalCommand command,
         [AsParameters] RentalsEndpointsServices services)
