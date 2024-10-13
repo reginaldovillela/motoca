@@ -1,5 +1,6 @@
 using Motoca.API.Application.Riders.Commands;
 using Motoca.API.Application.Riders.Models;
+using Motoca.API.Filters;
 using Motoca.API.Models.Results;
 
 namespace Motoca.API.Endpoints;
@@ -23,15 +24,21 @@ public static class RidersEndpoints
         var api = app.MapGroup(BaseEndpoint)
                      .WithTags(TagEndpoint);
 
-        api.MapPost("/", CreateRiderAsync);
+        api.MapPost("/", CreateRiderAsync)
+            .AddEndpointFilter<ValidationFilter<CreateRiderCommand>>()
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable)
+            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);;
 
-        api.MapPost("/{id}/cnh", UpdateDriversLicenseRiderAsync);
+        api.MapPost("/{id}/cnh", UpdateDriversLicenseRiderAsync)
+            .AddEndpointFilter<ValidationFilter<UpdateDriversLicenseRiderCommand>>()
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable)
+            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);;
     }
 
     /// <summary>
-    /// Cadastra uma moto no sistema
+    /// Cadastra um entregador no sistema
     /// </summary>
-    /// <param name="command">Dados da moto para cadastrar</param>
+    /// <param name="command">Dados do entregador para cadastrar</param>
     /// <param name="services"></param>
     private static async Task<Results<Created<Rider>, BadRequest<AnyFailureResult>>> CreateRiderAsync(
         [FromBody] CreateRiderCommand command,
@@ -50,12 +57,14 @@ public static class RidersEndpoints
     }
 
     /// <summary>
-    /// Altera a placa de uma moto cadastrada no sistema pelo Id (Identificador)
+    /// Altera a imagem do CNH do entregador cadastrado no sistema pelo Id (Identificador)
     /// </summary>
-    /// <param name="id">Id da moto</param>
-    /// <param name="command">Dados da nova placa</param>
+    /// <param name="id">Id do entregador</param>
+    /// <param name="command">Dados da nova imagem da CNH</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<string>, BadRequest<AnyFailureResult>>> UpdateDriversLicenseRiderAsync(
+    private static async Task<Results<Ok<string>, 
+                                      NotFound<AnyFailureResult>, 
+                                      BadRequest<AnyFailureResult>>> UpdateDriversLicenseRiderAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] UpdateDriversLicenseRiderCommand command,
         [AsParameters] RidersEndpointsServices services)

@@ -1,12 +1,12 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Motoca.API.Application.Bikes.Models;
+using Motoca.SharedKernel.Attributes;
 
 namespace Motoca.API.Application.Bikes.Commands;
 
 /// <summary>
 /// Dados da moto que será cadastrada no sistema
 /// </summary>
+[DisplayName("Moto > Dados Cadastrar")]
 public class CreateBikeCommand : IRequest<Bike>
 {
     /// <summary>
@@ -22,8 +22,8 @@ public class CreateBikeCommand : IRequest<Bike>
     /// </summary>
     [JsonPropertyName("ano")]
     [Required]
-    [DefaultValue(2000)]
-    public int Year { get; init; } = 2000;
+    [DefaultCurrentYear]
+    public int Year { get; init; } = DateTime.Today.Year;
 
     /// <summary>
     /// Informe o modelo da moto a ser cadastrada

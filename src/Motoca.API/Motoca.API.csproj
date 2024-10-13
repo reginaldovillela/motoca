@@ -14,4 +14,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Motoca.SharedKernel\Motoca.SharedKernel.csproj" />
+  </ItemGroup>
+
 </Project>

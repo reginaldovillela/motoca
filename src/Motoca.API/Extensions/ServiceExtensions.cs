@@ -17,7 +17,9 @@ internal static class ServiceExtensions
         services.AddSwaggerGen(config =>
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-             config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            config.CustomSchemaIds(x => x.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName 
+                                     ?? x.DefaultSchemaIdSelector());
         });
 
         services.Configure<ApiBehaviorOptions>(config =>

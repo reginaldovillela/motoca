@@ -7,6 +7,6 @@ public class CreateRiderCommandHandler : IRequestHandler<CreateRiderCommand, Rid
 {
     public async Task<Rider> Handle(CreateRiderCommand request, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new Rider());
+        return await Task.FromResult(new Rider("", "", "", DateOnly.MinValue, new DriversLicense("", "", "")));
     }
 }

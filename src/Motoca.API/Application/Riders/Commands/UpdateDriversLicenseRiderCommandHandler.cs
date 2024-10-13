@@ -7,6 +7,6 @@ public class UpdateDriversLicenseRiderCommandHandler : IRequestHandler<UpdateDri
 {
     public async Task<Rider> Handle(UpdateDriversLicenseRiderCommand request, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new Rider());
+        return await Task.FromResult(new Rider("", "", "", DateOnly.MinValue, new DriversLicense("", "", "")));
     }
 }

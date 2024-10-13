@@ -51,7 +51,9 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="licensePlate">Informe uma placa para filtrar</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Bike[]>, BadRequest<AnyFailureResult>>> GetBikesAsync(
+    private static async Task<Results<Ok<Bike[]>, 
+                              NotFound<AnyFailureResult>, 
+                              BadRequest<AnyFailureResult>>> GetBikesAsync(
         [FromQuery(Name = "placa")] string? licensePlate,
         [AsParameters] BikesEndpointsServices services)
     {
@@ -73,7 +75,9 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="id">Id da moto</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Bike>, BadRequest<AnyFailureResult>>> GetBikeByIdAsync(
+    private static async Task<Results<Ok<Bike>,
+                              NotFound<AnyFailureResult>,
+                              BadRequest<AnyFailureResult>>> GetBikeByIdAsync(
        [FromRoute(Name = "id")] string id,
        [AsParameters] BikesEndpointsServices services)
     {
@@ -116,7 +120,9 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="id">Id da moto</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<bool>, BadRequest<AnyFailureResult>>> DeleteBikeAsync(
+    private static async Task<Results<Ok<bool>, 
+                                      NotFound<AnyFailureResult>, 
+                                      BadRequest<AnyFailureResult>>> DeleteBikeAsync(
         [FromRoute(Name = "id")] string id,
         [AsParameters] BikesEndpointsServices services)
     {
@@ -140,7 +146,9 @@ public static class BikesEndpoints
     /// <param name="id">Id da moto</param>
     /// <param name="command">Dados da nova placa</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<AnySuccessWithDataResult<Bike>>, BadRequest<AnyFailureResult>>> ChangeLicensePlateBikeAsync(
+    private static async Task<Results<Ok<AnySuccessWithDataResult<Bike>>, 
+                                      NotFound<AnyFailureResult>,
+                                      BadRequest<AnyFailureResult>>> ChangeLicensePlateBikeAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] ChangeLicensePlateBikeCommand command,
         [AsParameters] BikesEndpointsServices services)

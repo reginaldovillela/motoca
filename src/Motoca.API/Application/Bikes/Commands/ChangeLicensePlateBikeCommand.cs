@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Motoca.API.Application.Bikes.Models;
 
 namespace Motoca.API.Application.Bikes.Commands;
@@ -7,6 +5,7 @@ namespace Motoca.API.Application.Bikes.Commands;
 /// <summary>
 /// Dados para alterar a placa
 /// </summary>
+[DisplayName("Moto > Placa > Dados Atualizar")]
 public class ChangeLicensePlateBikeCommand : IRequest<Bike>
 {
     /// <summary>

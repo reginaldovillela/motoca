@@ -1,10 +1,12 @@
 using Motoca.API.Application.Rentals.Models;
+using Motoca.SharedKernel.Attributes;
 
 namespace Motoca.API.Application.Rentals.Commands;
 
 /// <summary>
 /// Dados para cadastrar uma locação
 /// </summary>
+[DisplayName("Locação > Dados Cadastrar")]
 public class CreateRentalCommand : IRequest<Rental>
 {
     /// <summary>
@@ -26,23 +28,23 @@ public class CreateRentalCommand : IRequest<Rental>
     /// <summary>
     /// Data de inicio da locação
     /// </summary>
-    [DefaultValue("moto-123")]
+    [DefaultDateTime]
     [JsonPropertyName("data_inicio")]
     [Required]
-    public DateTime StartDate { get; init; } = DateTime.Now;
+    public DateTime StartDate { get; init; } = DateTime.UtcNow;
 
     /// <summary>
     /// Data de finilizacao da locação
     /// </summary>
-    [DefaultValue("moto-123")]
+    [DefaultDateTime(30, 0, 0)]
     [JsonPropertyName("data_termino")]
     [Required]
-    public DateTime EndDate { get; init; } = DateTime.Now;
+    public DateTime EndDate { get; init; } = DateTime.UtcNow;
 
     /// <summary>
     /// Data de previção da finalizacao da locação
     /// </summary>
-    [DefaultValue("moto-123")]
+    [DefaultDateTime]
     [JsonPropertyName("data_previsao_termino")]
-    public DateTime ExpectedEndDate { get; init; } = DateTime.Now;
+    public DateTime? ExpectedEndDate { get; init; } = DateTime.UtcNow;
 }

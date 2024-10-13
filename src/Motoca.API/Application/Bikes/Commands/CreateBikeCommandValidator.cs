@@ -31,7 +31,7 @@ public class CreateBikeCommandValidator : AbstractValidator<CreateBikeCommand>
             .NotNull()
             .WithMessage("A {PropertyName} não foi informado")
             .Matches("^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$")
-            .WithMessage("A {PropertyName} precisa estar no formato XXX0X00")
-            .WithName("placa");
+            .WithMessage("A {PropertyName} precisa estar no formato XXX0X00");
+            //.WithName("placa");
     }
 }

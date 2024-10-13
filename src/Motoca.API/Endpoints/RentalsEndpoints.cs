@@ -36,16 +36,18 @@ public static class RentalsEndpoints
     /// </summary>
     /// <param name="id">Id da locação</param>
     /// <param name="services"></param>
-    private static async Task<Results<Created<Rental[]>, BadRequest<AnyFailureResult>>> GetRentalByIdAsync(
+    private static async Task<Results<Ok<Rental>, 
+                                      NotFound<AnyFailureResult>, 
+                                      BadRequest<AnyFailureResult>>> GetRentalByIdAsync(
        [FromRoute(Name = "id")] string id,
        [AsParameters] RentalsEndpointsServices services)
     {
         try
         {
             var query = new GetRentalByIdQuery(id);
-            var rentals = await services.Mediator.Send(query);
+            var rental = await services.Mediator.Send(query);
 
-            return TypedResults.Created(string.Empty, rentals);
+            return TypedResults.Ok(rental);
         }
         catch (Exception ex)
         {
@@ -54,9 +56,9 @@ public static class RentalsEndpoints
     }
 
     /// <summary>
-    /// Cadastra uma moto no sistema
+    /// Cadastra uma locação no sistema
     /// </summary>
-    /// <param name="command">Dados da moto para cadastrar</param>
+    /// <param name="command">Dados da locação para cadastrar</param>
     /// <param name="services"></param>
     private static async Task<Results<Created<Rental>, BadRequest<AnyFailureResult>>> CreateRentalAsync(
         [FromBody] CreateRentalCommand command,
@@ -75,20 +77,20 @@ public static class RentalsEndpoints
     }
 
     /// <summary>
-    /// Altera a placa de uma moto cadastrada no sistema pelo Id (Identificador)
+    /// Finaliza uma locação cadastrada no sistema pelo Id (Identificador)
     /// </summary>
-    /// <param name="id">Id da moto</param>
-    /// <param name="command">Dados da nova placa</param>
+    /// <param name="id">Id da locação</param>
+    /// <param name="command">Dados para finalizar a locação</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<AnySuccessWithDataResult<Rental>>, BadRequest<AnyFailureResult>>> EndRentalAsync(
+    private static async Task<Results<Ok<AnySuccessWithDataResult<Rental>>, 
+                                      NotFound<AnyFailureResult>, 
+                                      BadRequest<AnyFailureResult>>> EndRentalAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] EndRentalCommand command,
         [AsParameters] RentalsEndpointsServices services)
     {
         try
         {
-            //command.Id = id;
-
             var rental = await services.Mediator.Send(command);
 
             return TypedResults.Ok(new AnySuccessWithDataResult<Rental>("Data de devolução informada com sucesso", rental));
