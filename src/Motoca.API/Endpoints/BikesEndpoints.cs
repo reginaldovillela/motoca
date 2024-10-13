@@ -1,9 +1,8 @@
-using System.Net;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Motoca.API.Application.Bikes.Commands;
 using Motoca.API.Application.Bikes.Models;
 using Motoca.API.Application.Bikes.Queries;
 using Motoca.API.Filters;
+using Motoca.API.Models.Results;
 
 namespace Motoca.API.Endpoints;
 
@@ -27,10 +26,10 @@ public static class BikesEndpoints
                      .WithTags(TagEndpoint);
 
         api.MapGet("/", GetBikesAsync)
-            .ProducesProblem((int)HttpStatusCode.NotAcceptable)
-            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity); ;
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
 
-        api.MapGet("/{id}", GetBikeByIdAsync);
+        api.MapGet("/{id}", GetBikeByIdAsync)
+             .ProducesProblem((int)HttpStatusCode.NotAcceptable);
 
         api.MapPost("/", CreateBikeAsync)
             .AddEndpointFilter<ValidationFilter<CreateBikeCommand>>()
@@ -52,7 +51,7 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="licensePlate">Informe uma placa para filtrar</param>
     /// <param name="services"></param>
-    private static async Task<Results<Created<Bike[]>, BadRequest<string>>> GetBikesAsync(
+    private static async Task<Results<Ok<Bike[]>, BadRequest<AnyFailureResult>>> GetBikesAsync(
         [FromQuery(Name = "placa")] string? licensePlate,
         [AsParameters] BikesEndpointsServices services)
     {
@@ -61,11 +60,11 @@ public static class BikesEndpoints
             var query = new GetBikesQuery(licensePlate);
             var bike = await services.Mediator.Send(query);
 
-            return TypedResults.Created(string.Empty, bike);
+            return TypedResults.Ok(bike);
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Não foi possível processar sua solicitação", ex.Message));
         }
     }
 
@@ -74,7 +73,7 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="id">Id da moto</param>
     /// <param name="services"></param>
-    private static async Task<Results<Created<Bike>, BadRequest<string>>> GetBikeByIdAsync(
+    private static async Task<Results<Ok<Bike>, BadRequest<AnyFailureResult>>> GetBikeByIdAsync(
        [FromRoute(Name = "id")] string id,
        [AsParameters] BikesEndpointsServices services)
     {
@@ -83,11 +82,11 @@ public static class BikesEndpoints
             var query = new GetBikeByIdQuery(id);
             var bike = await services.Mediator.Send(query);
 
-            return TypedResults.Created(string.Empty, bike);
+            return TypedResults.Ok(bike);
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Não foi possível processar sua solicitação", ex.Message));
         }
     }
 
@@ -96,7 +95,7 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="command">Dados da moto para cadastrar</param>
     /// <param name="services"></param>
-    private static async Task<Results<Created<Bike>, BadRequest<string>>> CreateBikeAsync(
+    private static async Task<Results<Created<AnySuccessWithDataResult<Bike>>, BadRequest<AnyFailureResult>>> CreateBikeAsync(
         [FromBody] CreateBikeCommand command,
         [AsParameters] BikesEndpointsServices services)
     {
@@ -104,11 +103,11 @@ public static class BikesEndpoints
         {
             var bike = await services.Mediator.Send(command);
 
-            return TypedResults.Created(string.Empty, bike);
+            return TypedResults.Created(string.Empty, new AnySuccessWithDataResult<Bike>("Moto cadastrada com sucesso", bike));
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Dados inválidos", ex.Message));
         }
     }
 
@@ -117,7 +116,7 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="id">Id da moto</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<bool>, BadRequest<string>>> DeleteBikeAsync(
+    private static async Task<Results<Ok<bool>, BadRequest<AnyFailureResult>>> DeleteBikeAsync(
         [FromRoute(Name = "id")] string id,
         [AsParameters] BikesEndpointsServices services)
     {
@@ -131,7 +130,7 @@ public static class BikesEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Dados inválidos", ex.Message));
         }
     }
 
@@ -141,7 +140,7 @@ public static class BikesEndpoints
     /// <param name="id">Id da moto</param>
     /// <param name="command">Dados da nova placa</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Bike>, BadRequest<string>>> ChangeLicensePlateBikeAsync(
+    private static async Task<Results<Ok<AnySuccessWithDataResult<Bike>>, BadRequest<AnyFailureResult>>> ChangeLicensePlateBikeAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] ChangeLicensePlateBikeCommand command,
         [AsParameters] BikesEndpointsServices services)
@@ -152,11 +151,11 @@ public static class BikesEndpoints
 
             var bike = await services.Mediator.Send(command);
 
-            return TypedResults.Ok(bike);
+            return TypedResults.Ok(new AnySuccessWithDataResult<Bike>("Placa modificada com sucesso", bike));
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Dados inválidos", ex.Message));
         }
     }
 }

@@ -1,12 +1,11 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using Motoca.API.Application.Rentals.Models;
 
 namespace Motoca.API.Application.Rentals.Commands;
 
 /// <summary>
 /// Dados para cadastrar uma locação
 /// </summary>
-public class EndRentalCommand : IRequest<string>
+public class EndRentalCommand : IRequest<Rental>
 {
     /// <summary>
     /// Id do entregador cadastrado no sistema

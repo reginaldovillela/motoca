@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Motoca.API.Application.Riders.Commands;
 using Motoca.API.Application.Riders.Models;
+using Motoca.API.Models.Results;
 
 namespace Motoca.API.Endpoints;
 
@@ -33,7 +33,7 @@ public static class RidersEndpoints
     /// </summary>
     /// <param name="command">Dados da moto para cadastrar</param>
     /// <param name="services"></param>
-    private static async Task<Results<Created<Rider>, BadRequest<string>>> CreateRiderAsync(
+    private static async Task<Results<Created<Rider>, BadRequest<AnyFailureResult>>> CreateRiderAsync(
         [FromBody] CreateRiderCommand command,
         [AsParameters] RidersEndpointsServices services)
     {
@@ -45,7 +45,7 @@ public static class RidersEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Dados inválidos", ex.Message));
         }
     }
 
@@ -55,7 +55,7 @@ public static class RidersEndpoints
     /// <param name="id">Id da moto</param>
     /// <param name="command">Dados da nova placa</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<string>, BadRequest<string>>> UpdateDriversLicenseRiderAsync(
+    private static async Task<Results<Ok<string>, BadRequest<AnyFailureResult>>> UpdateDriversLicenseRiderAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] UpdateDriversLicenseRiderCommand command,
         [AsParameters] RidersEndpointsServices services)
@@ -70,7 +70,7 @@ public static class RidersEndpoints
         }
         catch (Exception ex)
         {
-            return TypedResults.BadRequest(ex.Message);
+            return TypedResults.BadRequest(new AnyFailureResult("Dados inválidos", ex.Message));
         }
     }
 

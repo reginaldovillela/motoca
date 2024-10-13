@@ -7,6 +7,6 @@ public class CreateRentalCommandHandler : IRequestHandler<CreateRentalCommand, R
 {
     public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new Rental());
+        return await Task.FromResult(new Rental(new Guid()));
     }
 }

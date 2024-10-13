@@ -1,5 +1,3 @@
-using System.ComponentModel;
-
 namespace Motoca.API.Application.Rentals.Models;
 
 /// <summary>

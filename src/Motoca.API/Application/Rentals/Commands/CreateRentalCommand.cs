@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Motoca.API.Application.Rentals.Models;
 
 namespace Motoca.API.Application.Rentals.Commands;
