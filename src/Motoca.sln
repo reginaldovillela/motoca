@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.API", "Motoca.API\Mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.SharedKernel", "Motoca.SharedKernel\Motoca.SharedKernel.csproj", "{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.Domain", "Motoca.Domain\Motoca.Domain.csproj", "{C06E1850-E6CA-4A62-B28E-0834D0123B46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.Infrastructure", "Motoca.Infrastructure\Motoca.Infrastructure.csproj", "{D62D4554-0736-4C75-A3A6-6CA420169D79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C06E1850-E6CA-4A62-B28E-0834D0123B46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C06E1850-E6CA-4A62-B28E-0834D0123B46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C06E1850-E6CA-4A62-B28E-0834D0123B46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C06E1850-E6CA-4A62-B28E-0834D0123B46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

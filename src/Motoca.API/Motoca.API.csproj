@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Motoca.SharedKernel\Motoca.SharedKernel.csproj" />
+    <ProjectReference Include="..\Motoca.Domain\Motoca.Domain.csproj" />
+    <ProjectReference Include="..\Motoca.Infrastructure\Motoca.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

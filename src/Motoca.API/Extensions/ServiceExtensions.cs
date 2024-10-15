@@ -1,5 +1,7 @@
 using System.Reflection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Motoca.Domain.Bikes.AggregatesModel;
+using Motoca.Infrastructure.Bikes.Repositories;
 
 namespace Motoca.API.Extensions;
 
@@ -18,7 +20,7 @@ internal static class ServiceExtensions
         {
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-            config.CustomSchemaIds(x => x.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName 
+            config.CustomSchemaIds(x => x.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName
                                      ?? x.DefaultSchemaIdSelector());
         });
 
@@ -40,4 +42,10 @@ internal static class ServiceExtensions
         services.AddValidatorsFromAssemblyContaining<Program>(); //(ServiceLifetime.Singleton);
     }
 
+    public static void AddRepositories(this IHostApplicationBuilder builder)
+    {
+        var services = builder.Services;
+
+        services.AddScoped<IBikesRepository, BikesRepository>();
+    }
 }
