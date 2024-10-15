@@ -56,7 +56,7 @@ public class CreateRiderCommand : IRequest<Rider>
     [AllowedValues(["A", "AB", "B"], ErrorMessage = "Valor não permitido")]
     [JsonPropertyName("tipo_cnh")]
     [Required]
-    public string DriversLicenseLevel { get; init; } = string.Empty;
+    public string DriversLicenseCategory { get; init; } = string.Empty;
 
     /// <summary>
     /// Image (Base64) da CNH do entregador a ser cadastrado no sistema

@@ -21,6 +21,7 @@ public class UpdateDriversLicenseRiderCommand : IRequest<Rider>
     /// Imagem (Base64) da CNH do entregador para ser atulizado no sistema
     /// </summary>
     [DefaultValue("base64string")]
+    [Base64String(ErrorMessage = "Apenas imagens em Base64")]
     [JsonPropertyName("imagem_cnh")]
     [Required]
     public string DriversLicenseImage { get; init; } = string.Empty;

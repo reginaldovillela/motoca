@@ -1,9 +1,12 @@
 using Motoca.API.Application.Rentals.Models;
+using Motoca.Domain.Rentals.AggregatesModel;
 
 namespace Motoca.API.Application.Rentals.Commands;
 
 #pragma warning disable 1591
-public class CreateRentalCommandHandler : IRequestHandler<CreateRentalCommand, Rental>
+public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logger,
+                                        IRentalsRepository rentalsRepository,
+                                        IPlansRepository plansRepository) : IRequestHandler<CreateRentalCommand, Rental>
 {
     public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {

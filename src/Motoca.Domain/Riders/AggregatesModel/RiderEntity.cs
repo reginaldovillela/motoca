@@ -3,7 +3,7 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 
-public class RidersEntity(string id, string name, string cpfNumber)
+public class RiderEntity(string id, string name, string cpfNumber)
     : Entity, IAggregateRoot
 {
     public string Id { get; init; } = id;
@@ -14,5 +14,5 @@ public class RidersEntity(string id, string name, string cpfNumber)
 
     public DateOnly BirthDate { get; private set; }
 
-    public DriversLicense DriversLicense { get; private set; }
+    public DriversLicenseEntity DriversLicense { get; private set; }
 }

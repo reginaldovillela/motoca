@@ -2,7 +2,7 @@ using Motoca.Domain.SeedWork;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 
-public class DriversLicense
+public class DriversLicenseEntity
     : Entity
 {
     public string RiderId { get; init; }

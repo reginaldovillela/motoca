@@ -2,9 +2,9 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 
-public interface IRidersRepository : IRepository<RidersEntity>
+public interface IRidersRepository : IRepository<RiderEntity>
 {
-    Task<RidersEntity> AddAsync(RidersEntity rider);
+    Task<RiderEntity> AddAsync(RiderEntity rider);
 
-    Task<RidersEntity> GetRiderByIdAsync(string riderId);
+    Task<RiderEntity> GetRiderByIdAsync(string riderId);
 }

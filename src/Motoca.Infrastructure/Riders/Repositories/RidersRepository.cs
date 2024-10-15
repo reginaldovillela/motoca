@@ -8,12 +8,12 @@ public class RidersRepository : IRidersRepository
 {
     public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
-    public Task<RidersEntity> AddAsync(RidersEntity rider)
+    public Task<RiderEntity> AddAsync(RiderEntity rider)
     {
         throw new NotImplementedException();
     }
 
-    public Task<RidersEntity> GetRiderByIdAsync(string riderId)
+    public Task<RiderEntity> GetRiderByIdAsync(string riderId)
     {
         throw new NotImplementedException();
     }
