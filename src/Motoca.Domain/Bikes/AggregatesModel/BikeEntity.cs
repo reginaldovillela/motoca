@@ -18,10 +18,10 @@ public class BikeEntity(string id)
     public void SetYear(ushort year)
     {
         if (year < 2000)
-            throw new BikesDomainsException(EntityId, id, "Essa motoca é muito velhinha");
+            throw new BikesDomainException(EntityId, Id, "Essa motoca é muito velhinha");
 
         if (year > DateTime.UtcNow.Year + 1)
-            throw new BikesDomainsException(EntityId, id, "Essa motoca é nova demais. Ela vem do futuro?!");
+            throw new BikesDomainException(EntityId, Id, "Essa motoca é nova demais. Ela vem do futuro?!");
 
         Year = year;
     }

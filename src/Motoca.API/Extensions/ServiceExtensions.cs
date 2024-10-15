@@ -1,7 +1,9 @@
 using System.Reflection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Motoca.Domain.Bikes.AggregatesModel;
+using Motoca.Domain.Riders.AggregatesModel;
 using Motoca.Infrastructure.Bikes.Repositories;
+using Motoca.Infrastructure.Riders.Repositories;
 
 namespace Motoca.API.Extensions;
 
@@ -47,5 +49,6 @@ internal static class ServiceExtensions
         var services = builder.Services;
 
         services.AddScoped<IBikesRepository, BikesRepository>();
+        services.AddScoped<IRidersRepository, RidersRepository>();
     }
 }
