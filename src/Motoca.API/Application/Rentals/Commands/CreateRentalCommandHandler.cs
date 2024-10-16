@@ -1,3 +1,4 @@
+using System.Data;
 using Motoca.API.Application.Rentals.Models;
 using Motoca.Domain.Rentals.AggregatesModel;
 
@@ -10,6 +11,25 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
 {
     public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {
-        return await Task.FromResult(new Rental(new Guid(), 10, "", "", DateTime.Now, DateTime.Now, DateTime.Now, null));
+        var plan = await plansRepository.GetPlanByNameAsync("");
+
+        if (plan is null)
+        {
+             logger.LogInformation("O plano {@Name} não foi encontrado", request.BikeId);
+            throw new ConstraintException($"O plano {request.BikeId} não foi encontrado");
+        }
+
+        //Todo - Verificar se entregador existe
+
+        //Todo - Verificar se a moto existe
+
+        var newRental = new RentalEntity();
+
+
+        _ = await rentalsRepository.AddAsync(newRental);
+
+        _ = await rentalsRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+        return new Rental(newRental.EntityId, 10, "", "", DateTime.Now, DateTime.Now, DateTime.Now, null);
     }
 }

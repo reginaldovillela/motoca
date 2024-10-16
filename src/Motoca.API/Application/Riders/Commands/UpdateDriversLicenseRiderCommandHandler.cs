@@ -1,3 +1,4 @@
+using System.Data;
 using Motoca.API.Application.Riders.Models;
 using Motoca.Domain.Riders.AggregatesModel;
 
@@ -11,6 +12,20 @@ public class UpdateDriversLicenseRiderCommandHandler(ILogger<UpdateDriversLicens
     {
         var rider = await repository.GetRiderByIdAsync(request.Id);
 
-        return await Task.FromResult(new Rider("", "", "", DateOnly.MinValue, new DriversLicense("", "", "")));
+        if (rider is null)
+        {
+            logger.LogInformation("Entregador com o Id {@Id} não foi encontrado", request.Id);
+            throw new ConstraintException($"Entregador com o Id {request.Id} não foi encontrado");
+        }
+
+        //Todo alterar a foto
+
+        return new Rider(rider.Id, 
+                         rider.Name, 
+                         rider.CPF.Number, 
+                         rider.BirthDate, 
+                         new DriversLicense(rider.DriversLicense.Number, 
+                                            rider.DriversLicense.Category, 
+                                            rider.DriversLicense.Base64Image));
     }
 }
