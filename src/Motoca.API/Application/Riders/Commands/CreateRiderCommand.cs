@@ -53,14 +53,16 @@ public class CreateRiderCommand : IRequest<Rider>
     /// Categoria da CNH do entregador a ser cadastrado no sistema
     /// </summary>
     [DefaultValue("A")]
+    [AllowedValues(["A", "AB", "B"], ErrorMessage = "Valor não permitido")]
     [JsonPropertyName("tipo_cnh")]
     [Required]
-    public string DriversLicenseLevel { get; init; } = string.Empty;
+    public string DriversLicenseCategory { get; init; } = string.Empty;
 
     /// <summary>
     /// Image (Base64) da CNH do entregador a ser cadastrado no sistema
     /// </summary>
     [DefaultValue("base64string")]
+    [Base64String(ErrorMessage = "Apenas imagens em Base64")]
     [JsonPropertyName("imagem_cnh")]
     [Required]
     public string DriversLicenseImage { get; init; } = string.Empty;

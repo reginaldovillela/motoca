@@ -10,6 +10,15 @@ namespace Motoca.API.Application.Rentals.Commands;
 public class EndRentalCommand : IRequest<Rental>
 {
     /// <summary>
+    /// Id da locação cadastrada no sistema
+    /// </summary>
+    //[DefaultValue("entregador-123")]
+    [JsonIgnore]
+    [JsonPropertyName("id")]
+    [Required]
+    public string Id { get; init; } = string.Empty;
+
+    /// <summary>
     /// Data de finilizacao da locação
     /// </summary>
     [DefaultDateTime]

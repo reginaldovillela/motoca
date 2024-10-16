@@ -45,7 +45,7 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
             .Length(5, 15)
             .WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
-        RuleFor(x => x.DriversLicenseLevel)
+        RuleFor(x => x.DriversLicenseCategory)
             .NotEmpty()
             .WithMessage("A {PropertyName} não pode ser vazia")
             .NotNull()

@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddDefaultServices();
 builder.AddApplicationServices();
+builder.AddRepositories();
 
 var app = builder.Build();
 
