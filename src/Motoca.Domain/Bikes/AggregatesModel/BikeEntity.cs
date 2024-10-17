@@ -4,10 +4,18 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Domain.Bikes.AggregatesModel;
 
-public class BikeEntity(string id)
+public class BikeEntity
     : Entity, IAggregateRoot
 {
-    public string Id { get; init; } = id;
+    public BikeEntity(string id)
+    {
+        Id = id;
+    }
+
+    protected BikeEntity()
+    { }
+
+    public string Id { get; init; }
 
     public ushort Year { get; private set; } = 0;
 

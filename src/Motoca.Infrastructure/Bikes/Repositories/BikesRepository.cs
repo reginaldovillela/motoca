@@ -3,23 +3,29 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Infrastructure.Bikes.Repositories;
 
-public class BikesRepository : IBikesRepository
+public class BikesRepository(BikesContext context) : IBikesRepository
 {
-    public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+    public IUnitOfWork UnitOfWork => context;
 
-    public Task<BikeEntity> AddAsync(BikeEntity bike)
+    public async Task<BikeEntity> AddAsync(BikeEntity bike)
     {
-        throw new NotImplementedException();
+        await context.Bikes.AddAsync(bike);
+
+        return bike;
     }
 
-    public Task<bool> DeleteAsync(BikeEntity bike)
+    public async Task<bool> DeleteAsync(BikeEntity bike)
     {
-        throw new NotImplementedException();
+        _ = await Task.FromResult(context.Bikes.Remove(bike));
+
+        return true;
     }
 
-    public Task<BikeEntity> GetBikeByIdAsync(string bikeId)
+    public async Task<BikeEntity> GetBikeByIdAsync(string bikeId)
     {
-        throw new NotImplementedException();
+        var bike = await context.Bikes.SingleAsync(x => x.Id == bikeId);
+
+        return bike;
     }
 
     public Task<BikeEntity[]> GetBikesAsync(string? licensePlate)

@@ -1,8 +1,10 @@
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Motoca.Domain.Bikes.AggregatesModel;
 using Motoca.Domain.Rentals.AggregatesModel;
 using Motoca.Domain.Riders.AggregatesModel;
+using Motoca.Infrastructure.Bikes;
 using Motoca.Infrastructure.Bikes.Repositories;
 using Motoca.Infrastructure.Rentals.Repositories;
 using Motoca.Infrastructure.Riders.Repositories;
@@ -49,6 +51,12 @@ internal static class ServiceExtensions
     public static void AddRepositories(this IHostApplicationBuilder builder)
     {
         var services = builder.Services;
+        var configuration = builder.Configuration;
+
+        services.AddDbContext<BikesContext>(options =>
+        {
+            options.UseNpgsql(configuration.GetConnectionString("BikesConnection"));
+        });
 
         services.AddScoped<IBikesRepository, BikesRepository>();
         services.AddScoped<IRentalsRepository, RentalsRepository>();
