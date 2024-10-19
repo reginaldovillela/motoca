@@ -9,7 +9,7 @@ public class CreateBikeCommandValidator : AbstractValidator<CreateBikeCommand>
             .NotEmpty()
             .NotNull()
             .WithMessage("O {PropertyName} não foi informado")
-            .Length(5, 10)
+            .Length(5, 50)
             .WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
         RuleFor(x => x.Year)
@@ -22,7 +22,7 @@ public class CreateBikeCommandValidator : AbstractValidator<CreateBikeCommand>
             .NotEmpty()
             .NotNull()
             .WithMessage("O {PropertyName} não foi informado")
-            .Length(5, 20)
+            .Length(5, 50)
             .WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
         RuleFor(x => x.LicensePlate)
@@ -31,7 +31,7 @@ public class CreateBikeCommandValidator : AbstractValidator<CreateBikeCommand>
             .NotNull()
             .WithMessage("A {PropertyName} não foi informado")
             .Matches("^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$")
-            .WithMessage("A {PropertyName} precisa estar no formato XXX0X00");
-            //.WithName("placa");
+            .WithMessage("A {PropertyName} precisa estar no formato XXX0X00")
+            .WithName("placa");
     }
 }

@@ -9,14 +9,15 @@ public class GetBikesQueryHandler(ILogger<GetBikesQueryHandler> logger,
 {
     public async Task<Bike[]> Handle(GetBikesQuery request, CancellationToken cancellationToken)
     {
-        var bikes = await repository.GetBikesAsync(request.LicensePlate);
+        var bikes = await repository.GetAllAsync(request.LicensePlate);
 
         logger.LogInformation("Consulta concluída. Total de {@count} encontrados", bikes.Length);
 
-        return bikes.Select(m => new Bike(m.Id,
-                                          m.Year,
-                                          m.Model,
-                                          m.LicensePlate))
+        return bikes.Select(b => new Bike(b.EntityId,
+                                          b.Id,
+                                          b.Year,
+                                          b.Model,
+                                          b.LicensePlate))
                     .ToArray();
     }
 }

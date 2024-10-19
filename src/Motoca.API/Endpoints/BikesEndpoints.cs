@@ -41,9 +41,7 @@ public static class BikesEndpoints
             .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);
 
         api.MapPut("/{id}/placa", ChangeLicensePlateBikeAsync)
-            .AddEndpointFilter<ValidationFilter<ChangeLicensePlateBikeCommand>>()
-            .ProducesProblem((int)HttpStatusCode.NotAcceptable)
-            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
     }
 
     /// <summary>
@@ -51,8 +49,8 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="licensePlate">Informe uma placa para filtrar</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Bike[]>, 
-                              NotFound<AnyFailureResult>, 
+    private static async Task<Results<Ok<Bike[]>,
+                              NotFound<AnyFailureResult>,
                               BadRequest<AnyFailureResult>>> GetBikesAsync(
         [FromQuery(Name = "placa")] string? licensePlate,
         [AsParameters] BikesEndpointsServices services)
@@ -61,6 +59,9 @@ public static class BikesEndpoints
         {
             var query = new GetBikesQuery(licensePlate);
             var bike = await services.Mediator.Send(query);
+
+            if (bike is null || bike.Length == 0)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhuma moto cadastrada no sistema"));
 
             return TypedResults.Ok(bike);
         }
@@ -85,6 +86,9 @@ public static class BikesEndpoints
         {
             var query = new GetBikeByIdQuery(id);
             var bike = await services.Mediator.Send(query);
+
+            if (bike is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"A moto com o Id {id} não foi localizada"));
 
             return TypedResults.Ok(bike);
         }
@@ -120,8 +124,8 @@ public static class BikesEndpoints
     /// </summary>
     /// <param name="id">Id da moto</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<bool>, 
-                                      NotFound<AnyFailureResult>, 
+    private static async Task<Results<Ok<AnySuccessResult>,
+                                      NotFound<AnyFailureResult>,
                                       BadRequest<AnyFailureResult>>> DeleteBikeAsync(
         [FromRoute(Name = "id")] string id,
         [AsParameters] BikesEndpointsServices services)
@@ -130,9 +134,12 @@ public static class BikesEndpoints
         {
             var command = new DeleteBikeCommand(id);
 
-            var ret = await services.Mediator.Send(command);
+            var bike = await services.Mediator.Send(command);
 
-            return TypedResults.Ok(ret);
+            if (bike is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"A moto com o Id {id} não foi localizada"));
+
+            return TypedResults.Ok(new AnySuccessResult($"O cadastro da moto {id} foi removido"));
         }
         catch (Exception ex)
         {
@@ -146,7 +153,7 @@ public static class BikesEndpoints
     /// <param name="id">Id da moto</param>
     /// <param name="command">Dados da nova placa</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<AnySuccessWithDataResult<Bike>>, 
+    private static async Task<Results<Ok<AnySuccessWithDataResult<Bike>>,
                                       NotFound<AnyFailureResult>,
                                       BadRequest<AnyFailureResult>>> ChangeLicensePlateBikeAsync(
         [FromRoute(Name = "id")] string id,
@@ -158,6 +165,9 @@ public static class BikesEndpoints
             command.Id = id;
 
             var bike = await services.Mediator.Send(command);
+
+            if (bike is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"A moto com o Id {id} não foi localizada"));
 
             return TypedResults.Ok(new AnySuccessWithDataResult<Bike>("Placa modificada com sucesso", bike));
         }

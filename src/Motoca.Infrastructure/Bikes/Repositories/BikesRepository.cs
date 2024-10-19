@@ -16,30 +16,62 @@ public class BikesRepository(BikesContext context) : IBikesRepository
 
     public async Task<bool> DeleteAsync(BikeEntity bike)
     {
-        _ = await Task.FromResult(context.Bikes.Remove(bike));
+        return await Task.Run(() =>
+        {
+            _ = context.Bikes.Remove(bike);
 
-        return true;
+            return true;
+        });
     }
 
-    public async Task<BikeEntity> GetBikeByIdAsync(string bikeId)
+    public async Task<BikeEntity[]> GetAllAsync(string? licensePlate)
     {
-        var bike = await context.Bikes.SingleAsync(x => x.Id == bikeId);
+        return await Task.Run(() =>
+        {
+            var bikes = context.Bikes.AsNoTracking();
+
+            if (licensePlate is not null)
+                bikes = bikes.Where(x => x.LicensePlate == licensePlate);
+
+            return bikes.ToArray();
+        });
+    }
+
+    public async Task<BikeEntity> GetByIdAsync(string bikeId)
+    {
+        var bike = await context.Bikes.AsNoTracking().SingleOrDefaultAsync(x => x.Id == bikeId);
 
         return bike;
     }
 
-    public Task<BikeEntity[]> GetBikesAsync(string? licensePlate)
+    public async Task<BikeEntity> GetByInternalIdAsync(Guid entityId)
     {
-        throw new NotImplementedException();
+        var bike = await context.Bikes.AsNoTracking().SingleOrDefaultAsync(x => x.EntityId == entityId);
+
+        return bike;
     }
 
-    public Task<bool> HasAnyBikeWithLicensePlate(string licensePlate)
+    public async Task<bool> HasAnyBikeWithId(string id)
     {
-        throw new NotImplementedException();
+        var bikes = await context.Bikes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+
+        return bikes is not null;
     }
 
-    public Task<BikeEntity> UpdateLicensePlateAsync(BikeEntity bike)
+    public async Task<bool> HasAnyBikeWithLicensePlate(string licensePlate)
     {
-        throw new NotImplementedException();
+        var bikes = await context.Bikes.AsNoTracking().FirstOrDefaultAsync(x => x.LicensePlate == licensePlate);
+
+        return bikes is not null;
+    }
+
+    public async Task<BikeEntity> UpdateLicensePlateAsync(BikeEntity bike)
+    {
+        return await Task.Run(() =>
+        {
+            _ = context.Bikes.Update(bike);
+
+            return bike;
+        });
     }
 }

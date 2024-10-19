@@ -1,20 +1,21 @@
 using System.Data;
+using Motoca.API.Application.Bikes.Models;
 using Motoca.Domain.Bikes.AggregatesModel;
 
 namespace Motoca.API.Application.Bikes.Commands;
 
 #pragma warning disable 1591
 public class DeleteBikeCommandHandler(ILogger<DeleteBikeCommandHandler> logger,
-                                      IBikesRepository repository) : IRequestHandler<DeleteBikeCommand, bool>
+                                      IBikesRepository repository) : IRequestHandler<DeleteBikeCommand, Bike?>
 {
-    public async Task<bool> Handle(DeleteBikeCommand request, CancellationToken cancellationToken)
+    public async Task<Bike?> Handle(DeleteBikeCommand request, CancellationToken cancellationToken)
     {
-        var bikeToDelete = await repository.GetBikeByIdAsync(request.Id);
+        var bikeToDelete = await repository.GetByIdAsync(request.Id);
 
         if (bikeToDelete is null)
         {
-            logger.LogInformation("Moto com o Id {@Id} não foi encontrada", request.Id);
-            throw new ConstraintException($"Moto com o Id {request.Id} não foi encontrada");
+            logger.LogInformation("Não foi encontrada a moto com o Id: {@Id}", request.Id);
+            return null;
         }
 
         //Todo: Já o serviço de locações
@@ -33,6 +34,10 @@ public class DeleteBikeCommandHandler(ILogger<DeleteBikeCommandHandler> logger,
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return true;
+        return new Bike(bikeToDelete.EntityId,
+                        bikeToDelete.Id,
+                        bikeToDelete.Year,
+                        bikeToDelete.Model,
+                        bikeToDelete.LicensePlate);
     }
 }

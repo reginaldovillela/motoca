@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Motoca.API.Endpoints;
 using Motoca.API.Extensions;
+using Motoca.Infrastructure.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 builder.AddDefaultServices();
 builder.AddApplicationServices();
-builder.AddRepositories();
+builder.Services.RegisterInfrastructureDependencies(configuration);
 
 var app = builder.Build();
 

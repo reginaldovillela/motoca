@@ -47,20 +47,4 @@ internal static class ServiceExtensions
 
         services.AddValidatorsFromAssemblyContaining<Program>(); //(ServiceLifetime.Singleton);
     }
-
-    public static void AddRepositories(this IHostApplicationBuilder builder)
-    {
-        var services = builder.Services;
-        var configuration = builder.Configuration;
-
-        services.AddDbContext<BikesContext>(options =>
-        {
-            options.UseNpgsql(configuration.GetConnectionString("BikesConnection"));
-        });
-
-        services.AddScoped<IBikesRepository, BikesRepository>();
-        services.AddScoped<IRentalsRepository, RentalsRepository>();
-        services.AddScoped<IPlansRepository, PlansRepository>();
-        services.AddScoped<IRidersRepository, RidersRepository>();
-    }
 }

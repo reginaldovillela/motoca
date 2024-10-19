@@ -8,9 +8,13 @@ public interface IBikesRepository : IRepository<BikeEntity>
 
     Task<bool> DeleteAsync(BikeEntity bike);
 
-    Task<BikeEntity> GetBikeByIdAsync(string bikeId);
+    Task<BikeEntity[]> GetAllAsync(string? licensePlate);
 
-    Task<BikeEntity[]> GetBikesAsync(string? licensePlate);
+    Task<BikeEntity> GetByIdAsync(string bikeId);
+
+    Task<BikeEntity> GetByInternalIdAsync(Guid entityId);
+
+    Task<bool> HasAnyBikeWithId(string id);
 
     Task<bool> HasAnyBikeWithLicensePlate(string licensePlate);
 
