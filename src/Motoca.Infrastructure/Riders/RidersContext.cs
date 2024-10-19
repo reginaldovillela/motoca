@@ -1,19 +1,19 @@
-using Motoca.Domain.Bikes.AggregatesModel;
+using Motoca.Domain.Riders.AggregatesModel;
 using Motoca.Domain.SeedWork.Interfaces;
-using Motoca.Infrastructure.Bikes.Mappings;
 using Motoca.Infrastructure.Extensions;
+using Motoca.Infrastructure.Riders.Mappings;
 
-namespace Motoca.Infrastructure.Bikes;
+namespace Motoca.Infrastructure.Riders;
 
-public class BikesContext : DbContext, IUnitOfWork
+public class RidersContext : DbContext, IUnitOfWork
 {
     private readonly IMediator _mediator;
 
     private IDbContextTransaction _currentTransaction;
 
-    public DbSet<BikeEntity> Bikes { get; set; }
+    public DbSet<RiderEntity> Riders { get; set; }
 
-    public BikesContext(DbContextOptions<BikesContext> options, IMediator mediator)
+    public RidersContext(DbContextOptions<RidersContext> options, IMediator mediator)
         : base(options)
     {
         _mediator = mediator;
@@ -26,7 +26,8 @@ public class BikesContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new BikeEntityMapping());
+        modelBuilder.ApplyConfiguration(new RiderEntityMapping());
+        modelBuilder.ApplyConfiguration(new DriversLicenseEntityMapping());
         base.OnModelCreating(modelBuilder);
     }
 

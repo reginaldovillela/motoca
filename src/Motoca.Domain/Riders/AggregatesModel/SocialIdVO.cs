@@ -2,9 +2,17 @@ using Motoca.Domain.SeedWork;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 
-public class CPFValueObject(string cpfNumber) : ValueObject<CPFValueObject>
+public class SocialIdVO : ValueObject<SocialIdVO>
 {
-    public string Number { get; init; } = cpfNumber;
+    public string Number { get; init; }
+
+    // ef required
+    protected SocialIdVO() { }
+
+    public SocialIdVO(string id)
+    {
+        Number = id;
+    }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

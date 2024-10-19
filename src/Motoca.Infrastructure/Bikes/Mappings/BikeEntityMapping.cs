@@ -1,6 +1,6 @@
 using Motoca.Domain.Bikes.AggregatesModel;
 
-namespace Motoca.Infrastructure.Bikes.Mapppings;
+namespace Motoca.Infrastructure.Bikes.Mappings;
 
 public class BikeEntityMapping : IEntityTypeConfiguration<BikeEntity>
 {
@@ -17,6 +17,9 @@ public class BikeEntityMapping : IEntityTypeConfiguration<BikeEntity>
 
         builder.HasIndex(b => b.LicensePlate)
             .IsUnique();
+
+        builder.Property(b => b.EntityId)
+            .HasColumnName("InternalId");
 
         builder.Property(b => b.Id)
             .IsRequired()

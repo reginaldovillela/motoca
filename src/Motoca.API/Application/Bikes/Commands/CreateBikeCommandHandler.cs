@@ -33,11 +33,11 @@ public class CreateBikeCommandHandler(ILogger<CreateBikeCommandHandler> logger,
         newBike.SetModel(request.Model);
         newBike.SetLicensePlate(request.LicensePlate);
 
-        logger.LogInformation("Criando o registro da moto: {@bike}", request);
-
         _ = await repository.AddAsync(newBike);
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation("Criando o registro da moto: {@bike}", request);
 
         return new Bike(newBike.EntityId,
                         newBike.Id,

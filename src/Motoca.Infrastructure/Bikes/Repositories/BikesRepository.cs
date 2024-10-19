@@ -9,7 +9,7 @@ public class BikesRepository(BikesContext context) : IBikesRepository
 
     public async Task<BikeEntity> AddAsync(BikeEntity bike)
     {
-        await context.Bikes.AddAsync(bike);
+        _ = await context.Bikes.AddAsync(bike);
 
         return bike;
     }
@@ -37,23 +37,23 @@ public class BikesRepository(BikesContext context) : IBikesRepository
         });
     }
 
-    public async Task<BikeEntity> GetByIdAsync(string bikeId)
+    public async Task<BikeEntity?> GetByIdAsync(string bikeId)
     {
         var bike = await context.Bikes.AsNoTracking().SingleOrDefaultAsync(x => x.Id == bikeId);
 
         return bike;
     }
 
-    public async Task<BikeEntity> GetByInternalIdAsync(Guid entityId)
+    public async Task<BikeEntity?> GetByEntityIdAsync(Guid entityId)
     {
         var bike = await context.Bikes.AsNoTracking().SingleOrDefaultAsync(x => x.EntityId == entityId);
 
         return bike;
     }
 
-    public async Task<bool> HasAnyBikeWithId(string id)
+    public async Task<bool> HasAnyBikeWithId(string bikeId)
     {
-        var bikes = await context.Bikes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var bikes = await context.Bikes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == bikeId);
 
         return bikes is not null;
     }

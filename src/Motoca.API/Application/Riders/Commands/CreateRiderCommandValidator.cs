@@ -12,7 +12,7 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
             .WithMessage("A {PropertyName} não pode ser vazia")
             .NotNull()
             .WithMessage("O {PropertyName} não foi informado")
-            .Length(5, 10)
+            .Length(5, 50)
             .WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
         RuleFor(x => x.Name)
@@ -20,7 +20,7 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
             .WithMessage("A {PropertyName} não pode ser vazia")
             .NotNull()
             .WithMessage("O {PropertyName} não foi informado")
-            .Length(5, 50)
+            .Length(5, 100)
             .WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
         RuleFor(x => x.SocialId)
@@ -34,7 +34,7 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
         //.WithMessage("A {PropertyName} precisa estar no formato 000.000.000-00");
 
         RuleFor(x => x.BirthDate)
-            .GreaterThan(DateOnly.FromDateTime(DateTime.Now.AddYears(-18)))
+            .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now.AddYears(-18)))
             .WithMessage("O entregador não é maior de idade");
 
         RuleFor(x => x.DriversLicenseNumber)
