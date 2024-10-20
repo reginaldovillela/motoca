@@ -3,37 +3,91 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Infrastructure.Bikes.Repositories;
 
-public class BikesRepository : IBikesRepository
+public class BikesRepository(BikesContext context) : IBikesRepository
 {
-    public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+    public IUnitOfWork UnitOfWork => context;
 
-    public Task<BikeEntity> AddAsync(BikeEntity bike)
+    public async Task<BikeEntity> AddAsync(BikeEntity bike)
     {
-        throw new NotImplementedException();
+        _ = await context.Bikes.AddAsync(bike);
+
+        return bike;
     }
 
-    public Task<bool> DeleteAsync(BikeEntity bike)
+    public async Task<bool> DeleteAsync(BikeEntity bike)
     {
-        throw new NotImplementedException();
+        return await Task.Run(() =>
+        {
+            _ = context.Bikes.Remove(bike);
+
+            return true;
+        });
     }
 
-    public Task<BikeEntity> GetBikeByIdAsync(string bikeId)
+    public async Task<BikeEntity[]> GetAllAsync(string? licensePlate)
     {
-        throw new NotImplementedException();
+        return await Task.Run(() =>
+        {
+            var bikes = context.Bikes.AsNoTracking();
+
+            if (licensePlate is not null)
+                bikes = bikes.Where(x => x.LicensePlate == licensePlate);
+
+            return bikes.ToArray();
+        });
     }
 
-    public Task<BikeEntity[]> GetBikesAsync(string? licensePlate)
+    public async Task<BikeEntity?> GetByIdAsync(string bikeId)
     {
-        throw new NotImplementedException();
+        var bike = await context
+                            .Bikes
+                            .Where(b => b.Id == bikeId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+
+        return bike;
     }
 
-    public Task<bool> HasAnyBikeWithLicensePlate(string licensePlate)
+    public async Task<BikeEntity?> GetByEntityIdAsync(Guid entityId)
     {
-        throw new NotImplementedException();
+        var bike = await context
+                            .Bikes
+                            .Where(b => b.EntityId == entityId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+
+        return bike;
     }
 
-    public Task<BikeEntity> UpdateLicensePlateAsync(BikeEntity bike)
+    public async Task<bool> HasAnyBikeWithId(string bikeId)
     {
-        throw new NotImplementedException();
+        var bikes = await context
+                            .Bikes
+                            .Where(b => b.Id == bikeId)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync();
+
+        return bikes is not null;
+    }
+
+    public async Task<bool> HasAnyBikeWithLicensePlate(string licensePlate)
+    {
+        var bikes = await context
+                            .Bikes
+                            .Where(b => b.LicensePlate == licensePlate)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync();
+
+        return bikes is not null;
+    }
+
+    public async Task<BikeEntity> UpdateLicensePlateAsync(BikeEntity bike)
+    {
+        return await Task.Run(() =>
+        {
+            _ = context.Bikes.Update(bike);
+
+            return bike;
+        });
     }
 }

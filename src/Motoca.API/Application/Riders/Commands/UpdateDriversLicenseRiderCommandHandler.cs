@@ -6,26 +6,31 @@ namespace Motoca.API.Application.Riders.Commands;
 
 #pragma warning disable 1591
 public class UpdateDriversLicenseRiderCommandHandler(ILogger<UpdateDriversLicenseRiderCommandHandler> logger,
-                                                     IRidersRepository repository) : IRequestHandler<UpdateDriversLicenseRiderCommand, Rider>
+                                                     IRidersRepository repository,
+                                                     IRidersStorageService storageService) : IRequestHandler<UpdateDriversLicenseRiderCommand, Rider?>
 {
-    public async Task<Rider> Handle(UpdateDriversLicenseRiderCommand request, CancellationToken cancellationToken)
+    public async Task<Rider?> Handle(UpdateDriversLicenseRiderCommand request, CancellationToken cancellationToken)
     {
-        var rider = await repository.GetRiderByIdAsync(request.Id);
+        var riderToUpdateDriversLicense = await repository.GetByIdAsync(request.Id);
 
-        if (rider is null)
+        if (riderToUpdateDriversLicense is null)
         {
             logger.LogInformation("Entregador com o Id {@Id} não foi encontrado", request.Id);
-            throw new ConstraintException($"Entregador com o Id {request.Id} não foi encontrado");
+            return null;
         }
 
-        //Todo alterar a foto
+        var driversLicenseImageBytes = Convert.FromBase64String(request.DriversLicenseImage);
 
-        return new Rider(rider.Id, 
-                         rider.Name, 
-                         rider.CPF.Number, 
-                         rider.BirthDate, 
-                         new DriversLicense(rider.DriversLicense.Number, 
-                                            rider.DriversLicense.Category, 
-                                            rider.DriversLicense.Base64Image));
+        await storageService.SaveFileAsync(riderToUpdateDriversLicense.DriversLicense.EntityId.ToString(), driversLicenseImageBytes);
+
+        return new Rider(riderToUpdateDriversLicense.EntityId,
+                         riderToUpdateDriversLicense.Id,
+                         riderToUpdateDriversLicense.Name,
+                         riderToUpdateDriversLicense.SocialId.Number,
+                         riderToUpdateDriversLicense.BirthDate,
+                         new DriversLicense(riderToUpdateDriversLicense.DriversLicense.EntityId,
+                                            riderToUpdateDriversLicense.DriversLicense.Number,
+                                            riderToUpdateDriversLicense.DriversLicense.Category,
+                                            request.DriversLicenseImage));
     }
 }

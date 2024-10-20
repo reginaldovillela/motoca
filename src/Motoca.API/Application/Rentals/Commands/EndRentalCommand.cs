@@ -7,7 +7,7 @@ namespace Motoca.API.Application.Rentals.Commands;
 /// Dados para cadastrar uma locação
 /// </summary>
 [DisplayName("Locação > Dados Finalizar")]
-public class EndRentalCommand : IRequest<Rental>
+public class EndRentalCommand : IRequest<Rental?>
 {
     /// <summary>
     /// Id da locação cadastrada no sistema
@@ -16,7 +16,7 @@ public class EndRentalCommand : IRequest<Rental>
     [JsonIgnore]
     [JsonPropertyName("id")]
     [Required]
-    public string Id { get; init; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
 
     /// <summary>
     /// Data de finilizacao da locação
@@ -24,6 +24,6 @@ public class EndRentalCommand : IRequest<Rental>
     [DefaultDateTime]
     [JsonPropertyName("data_devolucao")]
     [Required]
-    public DateTime ReturnDate { get; init; } = DateTime.UtcNow;
+    public DateTime ReturnDate { get; set; } = DateTime.UtcNow;
 
 }

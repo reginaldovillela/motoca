@@ -6,13 +6,14 @@ namespace Motoca.API.Application.Bikes.Commands;
 /// Dados para alterar a placa
 /// </summary>
 [DisplayName("Moto > Placa > Dados Atualizar")]
-public class ChangeLicensePlateBikeCommand : IRequest<Bike>
+public class ChangeLicensePlateBikeCommand : IRequest<Bike?>
 {
     /// <summary>
     /// O Id da moto no sistema
     /// </summary>
     [JsonIgnore]
     [JsonPropertyName("id")]
+    [FromRoute(Name = "id")]
     public string Id { get; set; } = string.Empty;
 
     /// <summary>

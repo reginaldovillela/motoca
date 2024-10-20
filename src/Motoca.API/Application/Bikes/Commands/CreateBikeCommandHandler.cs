@@ -10,28 +10,39 @@ public class CreateBikeCommandHandler(ILogger<CreateBikeCommandHandler> logger,
 {
     public async Task<Bike> Handle(CreateBikeCommand request, CancellationToken cancellationToken)
     {
+        // verifica se já existe uma moto cadastrada com o mesmo Id
+        var hasAnyBikeWithId = await repository.HasAnyBikeWithId(request.Id);
+
+        if (hasAnyBikeWithId)
+        {
+            logger.LogInformation("Já existe uma moto com o Id: {@Id}", request.Id);
+            throw new ConstraintException($"Já existe uma moto com o Id: {request.Id}");
+        }
+
+        // verifica se placa digitada é diferente da atual
         var hasAnyBikeWithLicensePlate = await repository.HasAnyBikeWithLicensePlate(request.LicensePlate);
 
         if (hasAnyBikeWithLicensePlate)
         {
-            logger.LogInformation("Já existe uma moto com a placa: {@licensePlate}", request.LicensePlate);
+            logger.LogInformation("Já existe uma moto com a placa: {@LicensePlate}", request.LicensePlate);
             throw new ConstraintException($"Já existe uma moto com a placa: {request.LicensePlate}");
         }
 
-        var newBikeEntity = new BikeEntity(request.Id);
-        newBikeEntity.SetYear((ushort)request.Year);
-        newBikeEntity.SetModel(request.Model);
-        newBikeEntity.SetLicensePlate(request.LicensePlate);
+        var newBike = new BikeEntity(request.Id);
+        newBike.SetYear((ushort)request.Year);
+        newBike.SetModel(request.Model);
+        newBike.SetLicensePlate(request.LicensePlate);
 
-        logger.LogInformation("Criando o registro da moto: {@bike}", request);
-
-        _ = await repository.AddAsync(newBikeEntity);
+        _ = await repository.AddAsync(newBike);
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return new Bike(newBikeEntity.Id,
-                        newBikeEntity.Year,
-                        newBikeEntity.Model,
-                        newBikeEntity.LicensePlate);
+        logger.LogInformation("Criando o registro da moto: {@bike}", request);
+
+        return new Bike(newBike.EntityId,
+                        newBike.Id,
+                        newBike.Year,
+                        newBike.Model,
+                        newBike.LicensePlate);
     }
 }

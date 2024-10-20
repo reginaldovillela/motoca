@@ -1,4 +1,3 @@
-using System.Data;
 using Motoca.API.Application.Rentals.Models;
 using Motoca.Domain.Rentals.AggregatesModel;
 
@@ -6,25 +5,37 @@ namespace Motoca.API.Application.Rentals.Commands;
 
 #pragma warning disable 1591
 public class EndRentalCommandHandler(ILogger<EndRentalCommandHandler> logger,
-                                     IRentalsRepository rentalsRepository,
-                                     IPlansRepository plansRepository) : IRequestHandler<EndRentalCommand, Rental>
+                                     IRentalsRepository repository) : IRequestHandler<EndRentalCommand, Rental?>
 {
-    public async Task<Rental> Handle(EndRentalCommand request, CancellationToken cancellationToken)
+    public async Task<Rental?> Handle(EndRentalCommand request, CancellationToken cancellationToken)
     {
-        var rentalToEnd = await rentalsRepository.GetRentalByIdAsync(request.Id);
+        var rentalToEnd = await repository.GetByIdAsync(request.Id);
 
         if (rentalToEnd is null)
         {
             logger.LogInformation("A locação com o Id {@Id} não foi encontrada", request.Id);
-            throw new ConstraintException($"A locação com o Id {request.Id} não foi encontrada");
+            return null;
         }
 
         //Todo Calcular devolução
 
-        _ = await rentalsRepository.EndRentalAsync(rentalToEnd);
+        _ = await repository.EndRentalAsync(rentalToEnd);
 
-        _ = await rentalsRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        _ = await repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        return await Task.FromResult(new Rental(new Guid(), 10, "", "", DateTime.Now, DateTime.Now, DateTime.Now, null));
+        logger.LogInformation("Finalizando a locação: {@rental}", request);
+
+        return new Rental(rentalToEnd.EntityId, 
+                          rentalToEnd.Id, 
+                          rentalToEnd.RiderId, 
+                          rentalToEnd.BikeId, 
+                          new Plan(rentalToEnd.Plan.EntityId, 
+                                   rentalToEnd.Plan.Id, 
+                                   rentalToEnd.Plan.DefaultDuration, 
+                                   rentalToEnd.Plan.ValuePerDay), 
+                          rentalToEnd.CreateAt, 
+                          rentalToEnd.StartDate, 
+                          rentalToEnd.ExpectedEndDate, 
+                          rentalToEnd.ReturnDate);
     }
 }

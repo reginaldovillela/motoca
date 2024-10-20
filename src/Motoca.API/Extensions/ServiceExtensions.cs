@@ -1,8 +1,10 @@
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Motoca.Domain.Bikes.AggregatesModel;
 using Motoca.Domain.Rentals.AggregatesModel;
 using Motoca.Domain.Riders.AggregatesModel;
+using Motoca.Infrastructure.Bikes;
 using Motoca.Infrastructure.Bikes.Repositories;
 using Motoca.Infrastructure.Rentals.Repositories;
 using Motoca.Infrastructure.Riders.Repositories;
@@ -44,15 +46,5 @@ internal static class ServiceExtensions
         });
 
         services.AddValidatorsFromAssemblyContaining<Program>(); //(ServiceLifetime.Singleton);
-    }
-
-    public static void AddRepositories(this IHostApplicationBuilder builder)
-    {
-        var services = builder.Services;
-
-        services.AddScoped<IBikesRepository, BikesRepository>();
-        services.AddScoped<IRentalsRepository, RentalsRepository>();
-        services.AddScoped<IPlansRepository, PlansRepository>();
-        services.AddScoped<IRidersRepository, RidersRepository>();
     }
 }

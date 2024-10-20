@@ -3,22 +3,39 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Infrastructure.Rentals.Repositories;
 
-public class PlansRepository : IPlansRepository
+public class PlansRepository(RentalsContext context) : IPlansRepository
 {
-    public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+    public IUnitOfWork UnitOfWork => context;
 
-    public Task<PlansEntity> GetPlanByIdAsync(string planId)
+    public async Task<PlansEntity[]> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var plans = await context
+                            .Plans
+                            .AsNoTracking()
+                            .ToArrayAsync();
+
+        return plans;
     }
 
-    public Task<PlansEntity> GetPlanByNameAsync(string planName)
+    public async Task<PlansEntity?> GetByEntityIdAsync(Guid entityId)
     {
-        throw new NotImplementedException();
+        var plan = await context
+                            .Plans
+                            .Where(p => p.EntityId == entityId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+
+        return plan;
     }
 
-    public Task<PlansEntity[]> GetPlansAsync()
+    public async Task<PlansEntity?> GetByIdAsync(string planId)
     {
-        throw new NotImplementedException();
+        var plan = await context
+                            .Plans
+                            .Where(p => p.Id == planId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+
+        return plan;
     }
 }

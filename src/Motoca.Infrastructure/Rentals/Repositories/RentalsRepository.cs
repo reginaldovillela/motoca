@@ -3,22 +3,65 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Infrastructure.Rentals.Repositories;
 
-public class RentalsRepository : IRentalsRepository
+public class RentalsRepository(RentalsContext context) : IRentalsRepository
 {
-    public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+    public IUnitOfWork UnitOfWork => context;
 
-    public Task<RentalEntity> AddAsync(RentalEntity rental)
+    public async Task<RentalEntity> AddAsync(RentalEntity rental)
     {
-        throw new NotImplementedException();
+        context.Entry(rental.Plan).State = EntityState.Unchanged;
+
+        _ = await context.AddAsync(rental);
+
+        return rental;
     }
 
-    public Task<RentalEntity> EndRentalAsync(RentalEntity rental)
+    public async Task<RentalEntity> EndRentalAsync(RentalEntity rental)
     {
-        throw new NotImplementedException();
+        return await Task.Run(() =>
+        {
+            context.Entry(rental.Plan).State = EntityState.Unchanged;
+
+            context.Update(rental);
+
+            return rental;
+        });
     }
 
-    public Task<RentalEntity> GetRentalByIdAsync(string rentalId)
+    public async Task<RentalEntity[]> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await Task.Run(() =>
+        {
+            var rentals = context
+                            .Rentals
+                            .Include(r => r.Plan)
+                            .AsNoTracking();
+
+            return rentals.ToArray();
+        });
+    }
+
+    public async Task<RentalEntity?> GetByEntityIdAsync(Guid entityId)
+    {
+        var rental = await context
+                            .Rentals
+                            .Include(r => r.Plan)
+                            .Where(p => p.EntityId == entityId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+
+        return rental;
+    }
+
+    public async Task<RentalEntity?> GetByIdAsync(string rentalId)
+    {
+        var rental = await context
+                            .Rentals
+                            .Include(r => r.Plan)
+                            .Where(p => p.Id == rentalId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
+
+        return rental;
     }
 }

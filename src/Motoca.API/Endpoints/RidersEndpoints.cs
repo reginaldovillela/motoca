@@ -1,5 +1,6 @@
 using Motoca.API.Application.Riders.Commands;
 using Motoca.API.Application.Riders.Models;
+using Motoca.API.Application.Riders.Queries;
 using Motoca.API.Filters;
 using Motoca.API.Models.Results;
 
@@ -24,15 +25,72 @@ public static class RidersEndpoints
         var api = app.MapGroup(BaseEndpoint)
                      .WithTags(TagEndpoint);
 
+        api.MapGet("/", GetRidersAsync)
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
+
+        api.MapGet("/{id}", GetRiderByIdAsync)
+             .ProducesProblem((int)HttpStatusCode.NotAcceptable);
+
         api.MapPost("/", CreateRiderAsync)
             .AddEndpointFilter<ValidationFilter<CreateRiderCommand>>()
             .ProducesProblem((int)HttpStatusCode.NotAcceptable)
-            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);;
+            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity); ;
 
         api.MapPost("/{id}/cnh", UpdateDriversLicenseRiderAsync)
-            .AddEndpointFilter<ValidationFilter<UpdateDriversLicenseRiderCommand>>()
             .ProducesProblem((int)HttpStatusCode.NotAcceptable)
-            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);;
+            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity); ;
+    }
+
+    /// <summary>
+    /// Consulta os entregadores cadastrados
+    /// </summary>
+    /// <param name="services"></param>
+    private static async Task<Results<Ok<Rider[]>,
+                              NotFound<AnyFailureResult>,
+                              BadRequest<AnyFailureResult>>> GetRidersAsync(
+        [AsParameters] RidersEndpointsServices services)
+    {
+        try
+        {
+            var query = new GetRidersQuery();
+            var riders = await services.Mediator.Send(query);
+
+            if (riders is null || riders.Length == 0)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhum entregador cadastrado no sistema"));
+
+            return TypedResults.Ok(riders);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(new AnyFailureResult("Não foi possível processar sua solicitação", ex.Message));
+        }
+    }
+
+    /// <summary>
+    /// Consulta um entregador cadastrado pelo Id (Identificador)
+    /// </summary>
+    /// <param name="id">Id da entregador</param>
+    /// <param name="services"></param>
+    private static async Task<Results<Ok<Rider>,
+                              NotFound<AnyFailureResult>,
+                              BadRequest<AnyFailureResult>>> GetRiderByIdAsync(
+       [FromRoute(Name = "id")] string id,
+       [AsParameters] RidersEndpointsServices services)
+    {
+        try
+        {
+            var query = new GetRiderByIdQuery(id);
+            var rider = await services.Mediator.Send(query);
+
+            if (rider is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"O entregador com o Id {id} não foi localizado"));
+
+            return TypedResults.Ok(rider);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(new AnyFailureResult("Não foi possível processar sua solicitação", ex.Message));
+        }
     }
 
     /// <summary>
@@ -62,8 +120,8 @@ public static class RidersEndpoints
     /// <param name="id">Id do entregador</param>
     /// <param name="command">Dados da nova imagem da CNH</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<string>, 
-                                      NotFound<AnyFailureResult>, 
+    private static async Task<Results<Ok<AnySuccessWithDataResult<Rider>>,
+                                      NotFound<AnyFailureResult>,
                                       BadRequest<AnyFailureResult>>> UpdateDriversLicenseRiderAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] UpdateDriversLicenseRiderCommand command,
@@ -71,11 +129,14 @@ public static class RidersEndpoints
     {
         try
         {
-            //command.Id = id;
+            command.Id = id;
 
-            var rental = await services.Mediator.Send(command);
+            var rider = await services.Mediator.Send(command);
 
-            return TypedResults.Ok("");
+             if (rider is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"O entregador com o Id {id} não foi localizado"));
+
+            return TypedResults.Ok(new AnySuccessWithDataResult<Rider>("CNH modificada com sucesso", rider));
         }
         catch (Exception ex)
         {
