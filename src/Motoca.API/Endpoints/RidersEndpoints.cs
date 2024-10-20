@@ -1,8 +1,8 @@
 using Motoca.API.Application.Riders.Commands;
-using Motoca.API.Application.Riders.Models;
 using Motoca.API.Application.Riders.Queries;
 using Motoca.API.Filters;
 using Motoca.API.Models.Results;
+using Motoca.SharedKernel.Application.Models;
 
 namespace Motoca.API.Endpoints;
 

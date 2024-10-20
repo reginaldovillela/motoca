@@ -31,7 +31,13 @@ public class DriversLicenseEntityMapping : IEntityTypeConfiguration<DriversLicen
 
         builder.Property(d => d.Category)
             .IsRequired();
+    }
+}
 
-        //builder.Ignore(d => d.Base64Image);
+public static class DriversLicenseEntityMappingExtensions
+{
+    public static void ApplyDriversLicenseEntityMapping(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new DriversLicenseEntityMapping());
     }
 }

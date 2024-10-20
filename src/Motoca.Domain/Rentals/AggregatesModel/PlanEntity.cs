@@ -3,7 +3,7 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Domain.Rentals.AggregatesModel;
 
-public class PlansEntity
+public class PlanEntity
     : Entity, IAggregateRoot
 {
     public string Id { get; init; }
@@ -16,10 +16,10 @@ public class PlansEntity
 
     // ef required
 #pragma warning disable CS8618
-    protected PlansEntity() { }
+    protected PlanEntity() { }
 #pragma warning restore CS8618
 
-    public PlansEntity(string id, ushort defaultDuration, double valuePerDay)
+    public PlanEntity(string id, ushort defaultDuration, double valuePerDay)
     {
         Id = id;
         DefaultDuration = defaultDuration;

@@ -2,11 +2,11 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Domain.Rentals.AggregatesModel;
 
-public interface IPlansRepository : IRepository<PlansEntity>
+public interface IPlansRepository : IRepository<PlanEntity>
 {
-    Task<PlansEntity[]> GetAllAsync();
+    Task<PlanEntity[]> GetAllAsync();
 
-    Task<PlansEntity?> GetByEntityIdAsync(Guid entityId);
+    Task<PlanEntity?> GetByEntityIdAsync(Guid entityId);
 
-    Task<PlansEntity?> GetByIdAsync(string planId);
+    Task<PlanEntity?> GetByIdAsync(string planId);
 }

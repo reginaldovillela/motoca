@@ -1,7 +1,6 @@
-using Motoca.API.Application.Base.Models;
 using Motoca.SharedKernel.Attributes;
 
-namespace Motoca.API.Application.Bikes.Models;
+namespace Motoca.SharedKernel.Application.Models;
 
 /// <summary>
 /// Dados da moto
@@ -18,4 +17,4 @@ public record Bike(
     [property: JsonPropertyName("ano"), DefaultCurrentYear, Required] ushort Year,
     [property: JsonPropertyName("modelo"), DefaultValue("Modelo 123"), Required] string Model,
     [property: JsonPropertyName("placa"), DefaultValue("XXX0X00"), Required] string LicensePlate)
-: BaseModelRecord(InternalId);
+: Base(InternalId);

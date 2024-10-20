@@ -2,9 +2,9 @@ using Motoca.Domain.Rentals.AggregatesModel;
 
 namespace Motoca.Infrastructure.Rentals.Mappings;
 
-public class PlansEntityMapping : IEntityTypeConfiguration<PlansEntity>
+public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
 {
-    public void Configure(EntityTypeBuilder<PlansEntity> builder)
+    public void Configure(EntityTypeBuilder<PlanEntity> builder)
     {
         builder.ToTable("rentals_plans");
 
@@ -35,18 +35,18 @@ public class PlansEntityMapping : IEntityTypeConfiguration<PlansEntity>
     }
 }
 
-public static class PlansEntityMappingExtensions
+public static class PlanEntityMappingExtensions
 {
-    public static void ApplyPlansEntityMapping(this ModelBuilder modelBuilder)
+    public static void ApplyPlanEntityMapping(this ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new PlansEntityMapping());
+        modelBuilder.ApplyConfiguration(new PlanEntityMapping());
 
-        modelBuilder.Entity<PlansEntity>().HasData(
-            new PlansEntity("plano7", 7, 30),
-            new PlansEntity("plano15", 15, 28),
-            new PlansEntity("plano30", 30, 22),
-            new PlansEntity("plano45", 45, 20),
-            new PlansEntity("plano50", 50, 18)
+        modelBuilder.Entity<PlanEntity>().HasData(
+            new PlanEntity("plano7", 7, 30),
+            new PlanEntity("plano15", 15, 28),
+            new PlanEntity("plano30", 30, 22),
+            new PlanEntity("plano45", 45, 20),
+            new PlanEntity("plano50", 50, 18)
         );
     }
 }

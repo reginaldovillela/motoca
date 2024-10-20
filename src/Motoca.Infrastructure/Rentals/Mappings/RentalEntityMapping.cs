@@ -2,7 +2,7 @@ using Motoca.Domain.Rentals.AggregatesModel;
 
 namespace Motoca.Infrastructure.Rentals.Mappings;
 
-public class RentalsEntityMapping : IEntityTypeConfiguration<RentalEntity>
+public class RentalEntityMapping : IEntityTypeConfiguration<RentalEntity>
 {
     public void Configure(EntityTypeBuilder<RentalEntity> builder)
     {
@@ -40,10 +40,10 @@ public class RentalsEntityMapping : IEntityTypeConfiguration<RentalEntity>
     }
 }
 
-public static class RentalsEntityMappingExtensions
+public static class RentalEntityMappingExtensions
 {
-    public static void ApplyRentalsEntityMapping(this ModelBuilder modelBuilder)
+    public static void ApplyRentalEntityMapping(this ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new RentalsEntityMapping());
+        modelBuilder.ApplyConfiguration(new RentalEntityMapping());
     }
 }

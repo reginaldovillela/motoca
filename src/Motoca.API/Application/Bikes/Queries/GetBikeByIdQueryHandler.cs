@@ -1,5 +1,5 @@
-using Motoca.API.Application.Bikes.Models;
 using Motoca.Domain.Bikes.AggregatesModel;
+using Motoca.SharedKernel.Application.Models;
 
 namespace Motoca.API.Application.Bikes.Queries;
 

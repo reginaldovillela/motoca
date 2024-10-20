@@ -1,4 +1,4 @@
-using Motoca.API.Application.Bikes.Models;
+using Motoca.SharedKernel.Application.Models;
 
 namespace Motoca.API.Application.Bikes.Queries;
 

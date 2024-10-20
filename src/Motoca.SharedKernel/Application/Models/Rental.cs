@@ -1,7 +1,6 @@
-using Motoca.API.Application.Base.Models;
 using Motoca.SharedKernel.Attributes;
 
-namespace Motoca.API.Application.Rentals.Models;
+namespace Motoca.SharedKernel.Application.Models;
 
 /// <summary>
 /// Dados da locação cadastrada no sistema
@@ -26,4 +25,4 @@ public record Rental(
     [property: JsonPropertyName("data_inicio"), DefaultDateOnly, Required] DateOnly StartDate,
     [property: JsonPropertyName("data_previsao_termino"), DefaultDateOnly, Required] DateOnly ExpectedEndDate,
     [property: JsonPropertyName("data_devolucao"), DefaultDateTime] DateTime? ReturnDate
-) : BaseModelRecord(InternalId);
+) : Base(InternalId);

@@ -1,5 +1,5 @@
-using Motoca.API.Application.Rentals.Models;
 using Motoca.Domain.Rentals.AggregatesModel;
+using Motoca.SharedKernel.Application.Models;
 
 namespace Motoca.API.Application.Rentals.Commands;
 
