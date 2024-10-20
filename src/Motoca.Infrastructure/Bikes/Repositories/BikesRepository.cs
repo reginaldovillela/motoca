@@ -39,28 +39,44 @@ public class BikesRepository(BikesContext context) : IBikesRepository
 
     public async Task<BikeEntity?> GetByIdAsync(string bikeId)
     {
-        var bike = await context.Bikes.AsNoTracking().SingleOrDefaultAsync(x => x.Id == bikeId);
+        var bike = await context
+                            .Bikes
+                            .Where(b => b.Id == bikeId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
 
         return bike;
     }
 
     public async Task<BikeEntity?> GetByEntityIdAsync(Guid entityId)
     {
-        var bike = await context.Bikes.AsNoTracking().SingleOrDefaultAsync(x => x.EntityId == entityId);
+        var bike = await context
+                            .Bikes
+                            .Where(b => b.EntityId == entityId)
+                            .AsNoTracking()
+                            .SingleOrDefaultAsync();
 
         return bike;
     }
 
     public async Task<bool> HasAnyBikeWithId(string bikeId)
     {
-        var bikes = await context.Bikes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == bikeId);
+        var bikes = await context
+                            .Bikes
+                            .Where(b => b.Id == bikeId)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync();
 
         return bikes is not null;
     }
 
     public async Task<bool> HasAnyBikeWithLicensePlate(string licensePlate)
     {
-        var bikes = await context.Bikes.AsNoTracking().FirstOrDefaultAsync(x => x.LicensePlate == licensePlate);
+        var bikes = await context
+                            .Bikes
+                            .Where(b => b.LicensePlate == licensePlate)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync();
 
         return bikes is not null;
     }

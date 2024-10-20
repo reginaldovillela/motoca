@@ -133,6 +133,9 @@ public static class RidersEndpoints
 
             var rider = await services.Mediator.Send(command);
 
+             if (rider is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"O entregador com o Id {id} não foi localizado"));
+
             return TypedResults.Ok(new AnySuccessWithDataResult<Rider>("CNH modificada com sucesso", rider));
         }
         catch (Exception ex)

@@ -11,8 +11,6 @@ public class DriversLicenseEntity
 
     public string Category { get; init; }
 
-    //public string Base64Image { get; init; }
-
     public virtual RiderEntity Rider { get; init; }
 
     // ef required
@@ -24,6 +22,5 @@ public class DriversLicenseEntity
     {
         Number = number;
         Category = category;
-        //Base64Image = base64Image;
     }
 }

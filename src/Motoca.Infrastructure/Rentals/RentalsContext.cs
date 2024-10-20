@@ -1,24 +1,25 @@
-using Motoca.Domain.Riders.AggregatesModel;
+using Motoca.Domain.Rentals.AggregatesModel;
 using Motoca.Domain.SeedWork.Interfaces;
 using Motoca.Infrastructure.Extensions;
-using Motoca.Infrastructure.Riders.Mappings;
+using Motoca.Infrastructure.Rentals.Mappings;
 
-namespace Motoca.Infrastructure.Riders;
+namespace Motoca.Infrastructure.Rentals;
 
-public class RidersContext : DbContext, IUnitOfWork
+public class RentalsContext : DbContext, IUnitOfWork
 {
     private readonly IMediator _mediator;
 
     private IDbContextTransaction _currentTransaction;
 
-    public DbSet<RiderEntity> Riders { get; set; }
+    public DbSet<RentalEntity> Rentals { get; set; }
 
-    public DbSet<DriversLicenseEntity> DriversLicense { get; set; }
+    public DbSet<PlansEntity> Plans { get; set; }
 
-    public RidersContext(DbContextOptions<RidersContext> options, IMediator mediator)
+    public RentalsContext(DbContextOptions<RentalsContext> options, IMediator mediator)
         : base(options)
     {
         _mediator = mediator;
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,8 +29,17 @@ public class RidersContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new RiderEntityMapping());
-        modelBuilder.ApplyConfiguration(new DriversLicenseEntityMapping());
+        modelBuilder.ApplyConfiguration(new RentalsEntityMapping());
+        modelBuilder.ApplyConfiguration(new PlansEntityMapping());
+
+        modelBuilder.Entity<PlansEntity>().HasData(
+            new PlansEntity("plano7", 7, 30),
+            new PlansEntity("plano15", 15, 28),
+            new PlansEntity("plano30", 22, 22),
+            new PlansEntity("plano45", 45, 20),
+            new PlansEntity("plano50", 50, 18)
+        );
+
         base.OnModelCreating(modelBuilder);
     }
 

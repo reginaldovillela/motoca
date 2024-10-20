@@ -37,11 +37,11 @@ public class ChangeLicensePlateBikeCommandHandler(ILogger<ChangeLicensePlateBike
 
         bikeToChangeLicensePlate!.SetLicensePlate(request.LicensePlate);
 
-        logger.LogInformation("Alterando a placa da moto: {@bike}", request);
-
         _ = await repository.UpdateLicensePlateAsync(bikeToChangeLicensePlate);
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+        logger.LogInformation("Alterando a placa da moto: {@bike}", request);
 
         return new Bike(bikeToChangeLicensePlate.EntityId,
                         bikeToChangeLicensePlate.Id,

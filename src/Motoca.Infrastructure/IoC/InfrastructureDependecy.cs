@@ -5,6 +5,7 @@ using Motoca.Domain.Rentals.AggregatesModel;
 using Motoca.Domain.Riders.AggregatesModel;
 using Motoca.Infrastructure.Bikes;
 using Motoca.Infrastructure.Bikes.Repositories;
+using Motoca.Infrastructure.Rentals;
 using Motoca.Infrastructure.Rentals.Repositories;
 using Motoca.Infrastructure.Riders;
 using Motoca.Infrastructure.Riders.Repositories;
@@ -26,9 +27,20 @@ public static class InfrastructureDependecy
         });
 
         services.AddScoped<IBikesRepository, BikesRepository>();
+        services.AddScoped<BikesContext>();
+
+        /*
+         * Rentals
+         */
+
+        services.AddDbContext<RentalsContext>(options =>
+        {
+            options.UseNpgsql(configuration.GetConnectionString("MotocaConnection"));
+        });
+
         services.AddScoped<IRentalsRepository, RentalsRepository>();
         services.AddScoped<IPlansRepository, PlansRepository>();
-        services.AddScoped<BikesContext>();
+        services.AddScoped<RentalsContext>();
 
         /*
          * Riders
@@ -44,4 +56,7 @@ public static class InfrastructureDependecy
 
         services.AddScoped<IRidersStorageService, RidersStorageService>();
     }
+
+    
+
 }

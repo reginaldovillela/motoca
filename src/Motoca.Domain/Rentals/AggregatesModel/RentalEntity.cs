@@ -6,17 +6,49 @@ namespace Motoca.Domain.Rentals.AggregatesModel;
 public class RentalEntity
     : Entity, IAggregateRoot
 {
-    public double ValorPerDay { get; private set; }
+    public string Id { get; init; }
 
-    public string RiderId { get; private set; }
+    public string RiderId { get; init; }
 
-    public string BikeId { get; private set; }
+    public string BikeId { get; init; }
 
-    public DateTime StartDate { get; private set; }
+    public Guid PlanEntityId { get; init; }
 
-    public DateTime EndDate { get; private set; }
+    public DateTime CreateAt { get; init; }
 
-    public DateTime ExpectedEndDate { get; private set; }
+    public DateOnly StartDate { get; init; }
+
+    public DateOnly ExpectedEndDate => CalculateExpectedEndDate();
 
     public DateTime? ReturnDate { get; private set; }
+
+    public virtual PlansEntity Plan { get; init; }
+
+    public double AmountToPay => CalculateAmountToPay();
+
+    // ef required
+#pragma warning disable CS8618
+    protected RentalEntity() { }
+#pragma warning restore CS8618
+
+    public RentalEntity(string riderId, string bikeId, PlansEntity plan)
+    {
+        Id = $"{riderId}-{bikeId}";
+        RiderId = riderId;
+        BikeId = bikeId;
+        Plan = plan;
+
+        CreateAt = DateTime.Now;
+        StartDate = DateOnly.FromDateTime(CreateAt.AddDays(1));
+    }
+
+    private DateOnly CalculateExpectedEndDate()
+    {
+        return StartDate.AddDays(Plan.DefaultDuration);
+    }
+
+    private static double CalculateAmountToPay()
+    {
+        return 0;
+    }
 }

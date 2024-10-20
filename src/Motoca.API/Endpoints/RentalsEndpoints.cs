@@ -29,6 +29,8 @@ public static class RentalsEndpoints
         api.MapPost("/", CreateRentalAsync);
 
         api.MapPut("/{id}/devolucao", EndRentalAsync);
+
+        api.MapGet("/planos", GetPlansAsync);
     }
 
     /// <summary>
@@ -36,8 +38,8 @@ public static class RentalsEndpoints
     /// </summary>
     /// <param name="id">Id da locação</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Rental>, 
-                                      NotFound<AnyFailureResult>, 
+    private static async Task<Results<Ok<Rental>,
+                                      NotFound<AnyFailureResult>,
                                       BadRequest<AnyFailureResult>>> GetRentalByIdAsync(
        [FromRoute(Name = "id")] string id,
        [AsParameters] RentalsEndpointsServices services)
@@ -60,13 +62,17 @@ public static class RentalsEndpoints
     /// </summary>
     /// <param name="command">Dados da locação para cadastrar</param>
     /// <param name="services"></param>
-    private static async Task<Results<Created<Rental>, BadRequest<AnyFailureResult>>> CreateRentalAsync(
+    private static async Task<Results<Created<Rental>,
+                             BadRequest<AnyFailureResult>>> CreateRentalAsync(
         [FromBody] CreateRentalCommand command,
         [AsParameters] RentalsEndpointsServices services)
     {
         try
         {
             var rental = await services.Mediator.Send(command);
+
+            //  if (rental is null || rental.Length == 0)
+            //     return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhuma moto cadastrada no sistema"));
 
             return TypedResults.Created(string.Empty, rental);
         }
@@ -82,8 +88,8 @@ public static class RentalsEndpoints
     /// <param name="id">Id da locação</param>
     /// <param name="command">Dados para finalizar a locação</param>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<AnySuccessWithDataResult<Rental>>, 
-                                      NotFound<AnyFailureResult>, 
+    private static async Task<Results<Ok<AnySuccessWithDataResult<Rental>>,
+                                      NotFound<AnyFailureResult>,
                                       BadRequest<AnyFailureResult>>> EndRentalAsync(
         [FromRoute(Name = "id")] string id,
         [FromBody] EndRentalCommand command,
@@ -91,13 +97,41 @@ public static class RentalsEndpoints
     {
         try
         {
+            command.Id = id;
+
             var rental = await services.Mediator.Send(command);
+
+            if (rental is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhuma locação cadastrada no sistema"));
 
             return TypedResults.Ok(new AnySuccessWithDataResult<Rental>("Data de devolução informada com sucesso", rental));
         }
         catch (Exception ex)
         {
             return TypedResults.BadRequest(new AnyFailureResult("Dados inválidos", ex.Message));
+        }
+    }
+
+
+    /// <summary>
+    /// Busca todos os planos cadastrados no sistema
+    /// </summary>
+    /// <param name="services"></param>
+    private static async Task<Results<Ok<Plan[]>,
+                                      NotFound<AnyFailureResult>,
+                                      BadRequest<AnyFailureResult>>> GetPlansAsync(
+       [AsParameters] RentalsEndpointsServices services)
+    {
+        try
+        {
+            var query = new GetPlansQuery();
+            var plans = await services.Mediator.Send(query);
+
+            return TypedResults.Ok(plans);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(new AnyFailureResult("Não foi possível processar sua solicitação", ex.Message));
         }
     }
 }

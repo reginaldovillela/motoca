@@ -16,7 +16,7 @@ public class UpdateDriversLicenseRiderCommandHandler(ILogger<UpdateDriversLicens
         if (riderToUpdateDriversLicense is null)
         {
             logger.LogInformation("Entregador com o Id {@Id} não foi encontrado", request.Id);
-            throw new ConstraintException($"Entregador com o Id {request.Id} não foi encontrado");
+            return null;
         }
 
         var driversLicenseImageBytes = Convert.FromBase64String(request.DriversLicenseImage);
