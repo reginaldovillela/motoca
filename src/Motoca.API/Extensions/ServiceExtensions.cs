@@ -1,13 +1,11 @@
 using System.Reflection;
+using MassTransit;
+using MassTransit.Transports.Fabric;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Motoca.Domain.Bikes.AggregatesModel;
-using Motoca.Domain.Rentals.AggregatesModel;
-using Motoca.Domain.Riders.AggregatesModel;
-using Motoca.Infrastructure.Bikes;
-using Motoca.Infrastructure.Bikes.Repositories;
-using Motoca.Infrastructure.Rentals.Repositories;
-using Motoca.Infrastructure.Riders.Repositories;
+using Motoca.API.Application.Bikes.Services;
+using Motoca.API.Application.Riders.Services;
+using Motoca.SharedKernel.Message;
 
 namespace Motoca.API.Extensions;
 
@@ -46,5 +44,38 @@ internal static class ServiceExtensions
         });
 
         services.AddValidatorsFromAssemblyContaining<Program>(); //(ServiceLifetime.Singleton);
+
+        services.AddMassTransit(x =>
+        {
+            x.AddConsumer<GetBikeByIdConsumer>().Endpoint(e => e.Name = "get-bike-by-id");
+            x.AddRequestClient<GetBikeByIdRequest>(new Uri("exchange:get-bike-by-id"));
+
+            x.AddConsumer<GetRiderByIdConsumer>().Endpoint(e => e.Name = "get-rider-by-id");
+            x.AddRequestClient<GetRiderByIdRequest>(new Uri("exchange:get-rider-by-id"));
+
+            // x.UsingInMemory((context, cfg) =>
+            // {
+            //     cfg.ConfigureEndpoints(context);
+            // });
+
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("localhost", "/", h =>
+                {
+                    h.Username("rabbitmq");
+                    h.Password("rabbitmq");
+                });
+
+                // cfg.Host(new Uri("amqp://localhost:5672"), h =>
+                // {
+                //     h.Username("rabbitmq");
+                //     h.Password("rabbitmq");
+                // });
+
+                cfg.ConfigureEndpoints(context);
+            });
+
+
+        });
     }
 }

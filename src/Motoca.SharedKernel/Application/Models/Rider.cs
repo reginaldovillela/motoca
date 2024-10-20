@@ -1,7 +1,6 @@
-using Motoca.API.Application.Base.Models;
 using Motoca.SharedKernel.Attributes;
 
-namespace Motoca.API.Application.Rentals.Models;
+namespace Motoca.SharedKernel.Application.Models;
 
 /// <summary>
 /// Dados do entregador cadastrado no sistema
@@ -20,4 +19,4 @@ public record Rider(
     [property: JsonPropertyName("cpf"), DefaultValue("João da Silva"), Required] string SocialId,
     [property: JsonPropertyName("data_nascimento"), DefaultDateOnly, Required] DateOnly BirthDate,
     [property: JsonPropertyName("cnh"), Required] DriversLicense DriversLicense
-) : BaseModelRecord(InternalId);
+) : Base(InternalId);

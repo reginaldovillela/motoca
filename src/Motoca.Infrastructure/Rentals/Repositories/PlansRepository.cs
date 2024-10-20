@@ -7,7 +7,7 @@ public class PlansRepository(RentalsContext context) : IPlansRepository
 {
     public IUnitOfWork UnitOfWork => context;
 
-    public async Task<PlansEntity[]> GetAllAsync()
+    public async Task<PlanEntity[]> GetAllAsync()
     {
         var plans = await context
                             .Plans
@@ -17,7 +17,7 @@ public class PlansRepository(RentalsContext context) : IPlansRepository
         return plans;
     }
 
-    public async Task<PlansEntity?> GetByEntityIdAsync(Guid entityId)
+    public async Task<PlanEntity?> GetByEntityIdAsync(Guid entityId)
     {
         var plan = await context
                             .Plans
@@ -28,7 +28,7 @@ public class PlansRepository(RentalsContext context) : IPlansRepository
         return plan;
     }
 
-    public async Task<PlansEntity?> GetByIdAsync(string planId)
+    public async Task<PlanEntity?> GetByIdAsync(string planId)
     {
         var plan = await context
                             .Plans

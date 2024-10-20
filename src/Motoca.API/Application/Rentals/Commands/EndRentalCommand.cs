@@ -1,4 +1,4 @@
-using Motoca.API.Application.Rentals.Models;
+using Motoca.SharedKernel.Application.Models;
 using Motoca.SharedKernel.Attributes;
 
 namespace Motoca.API.Application.Rentals.Commands;

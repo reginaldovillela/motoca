@@ -1,12 +1,16 @@
-using Motoca.API.Application.Rentals.Models;
+using MassTransit;
 using Motoca.Domain.Rentals.AggregatesModel;
+using Motoca.SharedKernel.Application.Models;
+using Motoca.SharedKernel.Message;
 
 namespace Motoca.API.Application.Rentals.Commands;
 
 #pragma warning disable 1591
 public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logger,
                                         IRentalsRepository rentalsRepository,
-                                        IPlansRepository plansRepository) : IRequestHandler<CreateRentalCommand, Rental?>
+                                        IPlansRepository plansRepository,
+                                        IRequestClient<GetBikeByIdRequest> bikeConsumer,
+                                        IRequestClient<GetRiderByIdRequest> riderConsumer) : IRequestHandler<CreateRentalCommand, Rental?>
 {
     public async Task<Rental?> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {
@@ -18,9 +22,13 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
             return null;
         }
 
-        //Todo - Verificar se entregador existe
-
         //Todo - Verificar se a moto existe
+        var getBikeRequest = new GetBikeByIdRequest { BikeId = request.BikeId };
+        var getBikeResponse = await bikeConsumer.GetResponse<GetBikeByIdResponse>(getBikeRequest, cancellationToken);
+
+        //Todo - Verificar se entregador existe
+        var getRiderRequest = new GetRiderByIdRequest { RiderId = request.RiderId };
+        var getRiderResponse = await riderConsumer.GetResponse<GetRiderByIdResponse>(getRiderRequest, cancellationToken);
 
         var newRental = new RentalEntity(request.RiderId, request.BikeId, plan);
 

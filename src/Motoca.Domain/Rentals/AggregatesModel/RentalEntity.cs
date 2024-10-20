@@ -24,7 +24,7 @@ public class RentalEntity
 
     #region "ef relations"
 
-    public PlansEntity Plan { get; set; } = null!;
+    public PlanEntity Plan { get; set; } = null!;
 
     #endregion
 
@@ -35,7 +35,7 @@ public class RentalEntity
     protected RentalEntity() { }
 #pragma warning restore CS8618
 
-    public RentalEntity(string riderId, string bikeId, PlansEntity plan)
+    public RentalEntity(string riderId, string bikeId, PlanEntity plan)
     {
         Id = $"{riderId}-{bikeId}";
         RiderId = riderId;

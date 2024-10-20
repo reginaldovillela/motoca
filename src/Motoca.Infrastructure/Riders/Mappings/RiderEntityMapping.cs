@@ -43,3 +43,19 @@ public class RiderEntityMapping : IEntityTypeConfiguration<RiderEntity>
 
     }
 }
+
+public static class RiderEntityMappingExtensions
+{
+    public static void ApplyRiderEntityMapping(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new RiderEntityMapping());
+
+        var rider = new RiderEntity("entregador-exemplo",
+                                    "Fulano de Tal",
+                                    "12345678900",
+                                    DateOnly.FromDateTime(DateTime.Today.AddYears(19)));
+        rider.SetDriversLicense("12345678900", "A");
+
+        modelBuilder.Entity<RiderEntity>().HasData(rider);
+    }
+}

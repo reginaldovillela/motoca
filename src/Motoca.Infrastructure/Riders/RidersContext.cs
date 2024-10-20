@@ -28,8 +28,8 @@ public class RidersContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new RiderEntityMapping());
-        modelBuilder.ApplyConfiguration(new DriversLicenseEntityMapping());
+        modelBuilder.ApplyRiderEntityMapping();
+        modelBuilder.ApplyDriversLicenseEntityMapping();
         base.OnModelCreating(modelBuilder);
     }
 

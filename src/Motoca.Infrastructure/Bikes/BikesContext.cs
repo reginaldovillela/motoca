@@ -26,7 +26,7 @@ public class BikesContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new BikeEntityMapping());
+        modelBuilder.ApplyBikeEntityMapping();
         base.OnModelCreating(modelBuilder);
     }
 

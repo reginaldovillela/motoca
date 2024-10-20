@@ -38,3 +38,18 @@ public class BikeEntityMapping : IEntityTypeConfiguration<BikeEntity>
             .HasMaxLength(7);
     }
 }
+
+public static class BikeEntityMappingExtensions
+{
+    public static void ApplyBikeEntityMapping(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new BikeEntityMapping());
+
+        var bike = new BikeEntity("moto-exemplo");
+        bike.SetYear(2024);
+        bike.SetModel("modelo-moto-exemplo");
+        bike.SetLicensePlate("XXX0X00");
+
+        modelBuilder.Entity<BikeEntity>().HasData(bike);
+    }
+}

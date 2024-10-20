@@ -13,7 +13,7 @@ public class RentalsContext : DbContext, IUnitOfWork
 
     public DbSet<RentalEntity> Rentals { get; set; }
 
-    public DbSet<PlansEntity> Plans { get; set; }
+    public DbSet<PlanEntity> Plans { get; set; }
 
     public RentalsContext(DbContextOptions<RentalsContext> options, IMediator mediator)
         : base(options)
@@ -29,8 +29,8 @@ public class RentalsContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyPlansEntityMapping();
-        modelBuilder.ApplyRentalsEntityMapping();
+        modelBuilder.ApplyPlanEntityMapping();
+        modelBuilder.ApplyRentalEntityMapping();
         base.OnModelCreating(modelBuilder);
     }
 

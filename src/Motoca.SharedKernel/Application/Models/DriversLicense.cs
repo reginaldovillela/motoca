@@ -1,6 +1,4 @@
-using Motoca.API.Application.Base.Models;
-
-namespace Motoca.API.Application.Riders.Models;
+namespace Motoca.SharedKernel.Application.Models;
 
 /// <summary>
 /// Dados da carteira de motorista nacional (CNH)
@@ -15,6 +13,6 @@ public record DriversLicense(
     [property:JsonPropertyName("numero"), DefaultValue("12345678900"), Required] string DriversLicenseNumber,
     [property:JsonPropertyName("tipo"), DefaultValue("A"), Required] string DriversLicenseCategory,
     [property:JsonPropertyName("imagem"), DefaultValue("base64string"), Required] string DriversLicenseImage
-) : BaseModelRecord(InternalId);
+) : Base(InternalId);
 
 

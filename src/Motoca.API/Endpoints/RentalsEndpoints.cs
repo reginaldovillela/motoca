@@ -1,7 +1,7 @@
 using Motoca.API.Application.Rentals.Commands;
-using Motoca.API.Application.Rentals.Models;
 using Motoca.API.Application.Rentals.Queries;
 using Motoca.API.Models.Results;
+using Motoca.SharedKernel.Application.Models;
 
 namespace Motoca.API.Endpoints;
 
