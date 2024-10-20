@@ -6,17 +6,15 @@ namespace Motoca.Domain.Rentals.AggregatesModel;
 public class PlansEntity
     : Entity, IAggregateRoot
 {
-    //public Guid RentalEntityId { get; init; }
-
     public string Id { get; init; }
 
     public ushort DefaultDuration { get; init; }
 
     public double ValuePerDay { get; init; }
 
-    //public virtual RentalEntity Rental { get; init; }
+    public ICollection<RentalEntity> Rentals { get; } = [];
 
-        // ef required
+    // ef required
 #pragma warning disable CS8618
     protected PlansEntity() { }
 #pragma warning restore CS8618

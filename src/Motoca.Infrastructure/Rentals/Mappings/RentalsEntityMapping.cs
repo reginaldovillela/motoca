@@ -19,6 +19,10 @@ public class RentalsEntityMapping : IEntityTypeConfiguration<RentalEntity>
         builder.HasIndex(r => r.Id)
             .IsUnique();
 
+        builder.HasOne(r=> r.Plan)
+            .WithMany(r => r.Rentals)
+            .HasForeignKey(r=> r.PlanEntityId)
+            .IsRequired();
 
         builder.Property(r => r.EntityId)
             .HasColumnName("InternalId");
@@ -33,5 +37,13 @@ public class RentalsEntityMapping : IEntityTypeConfiguration<RentalEntity>
         builder.Property(r => r.StartDate)
             .IsRequired()
             .HasColumnType("date");
+    }
+}
+
+public static class RentalsEntityMappingExtensions
+{
+    public static void ApplyRentalsEntityMapping(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfiguration(new RentalsEntityMapping());
     }
 }

@@ -24,6 +24,8 @@ public static class RentalsEndpoints
         var api = app.MapGroup(BaseEndpoint)
                      .WithTags(TagEndpoint);
 
+        api.MapGet("/", GetRentalsAsync);
+
         api.MapGet("/{id}", GetRentalByIdAsync);
 
         api.MapPost("/", CreateRentalAsync);
@@ -32,6 +34,32 @@ public static class RentalsEndpoints
 
         api.MapGet("/planos", GetPlansAsync);
     }
+
+    /// <summary>
+    /// Consulta todas as locações no sistema
+    /// </summary>
+    /// <param name="services"></param>
+    private static async Task<Results<Ok<Rental[]>,
+                              NotFound<AnyFailureResult>,
+                              BadRequest<AnyFailureResult>>> GetRentalsAsync(
+        [AsParameters] RentalsEndpointsServices services)
+    {
+        try
+        {
+            var query = new GetRentalsQuery();
+            var rentals = await services.Mediator.Send(query);
+
+            if (rentals is null || rentals.Length == 0)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhuma locação cadastrada no sistema"));
+
+            return TypedResults.Ok(rentals);
+        }
+        catch (Exception ex)
+        {
+            return TypedResults.BadRequest(new AnyFailureResult("Não foi possível processar sua solicitação", ex.Message));
+        }
+    }
+
 
     /// <summary>
     /// Consulta uma locação cadastrada no sistema pelo Id (Identificador)
@@ -48,6 +76,9 @@ public static class RentalsEndpoints
         {
             var query = new GetRentalByIdQuery(id);
             var rental = await services.Mediator.Send(query);
+
+            if (rental is null)
+                return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", $"A locação com o Id {id} não foi localizada"));
 
             return TypedResults.Ok(rental);
         }
@@ -70,9 +101,6 @@ public static class RentalsEndpoints
         try
         {
             var rental = await services.Mediator.Send(command);
-
-            //  if (rental is null || rental.Length == 0)
-            //     return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhuma moto cadastrada no sistema"));
 
             return TypedResults.Created(string.Empty, rental);
         }

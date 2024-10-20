@@ -29,17 +29,8 @@ public class RentalsContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new RentalsEntityMapping());
-        modelBuilder.ApplyConfiguration(new PlansEntityMapping());
-
-        modelBuilder.Entity<PlansEntity>().HasData(
-            new PlansEntity("plano7", 7, 30),
-            new PlansEntity("plano15", 15, 28),
-            new PlansEntity("plano30", 22, 22),
-            new PlansEntity("plano45", 45, 20),
-            new PlansEntity("plano50", 50, 18)
-        );
-
+        modelBuilder.ApplyPlansEntityMapping();
+        modelBuilder.ApplyRentalsEntityMapping();
         base.OnModelCreating(modelBuilder);
     }
 

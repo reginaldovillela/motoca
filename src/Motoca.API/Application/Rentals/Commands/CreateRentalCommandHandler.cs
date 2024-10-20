@@ -24,7 +24,6 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
 
         var newRental = new RentalEntity(request.RiderId, request.BikeId, plan);
 
-
         _ = await rentalsRepository.AddAsync(newRental);
 
         _ = await rentalsRepository.UnitOfWork.SaveChangesAsync(cancellationToken);

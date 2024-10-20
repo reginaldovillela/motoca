@@ -18,14 +18,14 @@ public class RidersRepository(RidersContext context) : IRidersRepository
     public async Task<RiderEntity[]> GetAllAsync()
     {
         return await Task.Run(() =>
-       {
-           var riders = context
-                            .Riders
-                            .Include(r => r.DriversLicense)
-                            .AsNoTracking();
+        {
+            var riders = context
+                             .Riders
+                             .Include(r => r.DriversLicense)
+                             .AsNoTracking();
 
-           return riders.ToArray();
-       });
+            return riders.ToArray();
+        });
     }
 
     public async Task<RiderEntity?> GetByEntityIdAsync(Guid entityId)

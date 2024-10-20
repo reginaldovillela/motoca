@@ -8,6 +8,8 @@ public interface IRentalsRepository : IRepository<RentalEntity>
 
     Task<RentalEntity> EndRentalAsync(RentalEntity rental);
 
+    Task<RentalEntity[]> GetAllAsync();
+
     Task<RentalEntity?> GetByEntityIdAsync(Guid entityId);
 
     Task<RentalEntity?> GetByIdAsync(string rentalId);

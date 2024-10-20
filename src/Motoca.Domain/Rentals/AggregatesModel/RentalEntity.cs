@@ -12,7 +12,7 @@ public class RentalEntity
 
     public string BikeId { get; init; }
 
-    public Guid PlanEntityId { get; init; }
+    public Guid PlanEntityId { get; set; }
 
     public DateTime CreateAt { get; init; }
 
@@ -22,7 +22,11 @@ public class RentalEntity
 
     public DateTime? ReturnDate { get; private set; }
 
-    public virtual PlansEntity Plan { get; init; }
+    #region "ef relations"
+
+    public PlansEntity Plan { get; set; } = null!;
+
+    #endregion
 
     public double AmountToPay => CalculateAmountToPay();
 
@@ -37,6 +41,7 @@ public class RentalEntity
         RiderId = riderId;
         BikeId = bikeId;
         Plan = plan;
+        PlanEntityId = plan.EntityId;
 
         CreateAt = DateTime.Now;
         StartDate = DateOnly.FromDateTime(CreateAt.AddDays(1));

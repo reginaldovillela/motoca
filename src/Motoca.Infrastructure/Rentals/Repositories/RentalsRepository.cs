@@ -9,6 +9,8 @@ public class RentalsRepository(RentalsContext context) : IRentalsRepository
 
     public async Task<RentalEntity> AddAsync(RentalEntity rental)
     {
+        context.Entry(rental.Plan).State = EntityState.Unchanged;
+
         _ = await context.AddAsync(rental);
 
         return rental;
@@ -18,10 +20,24 @@ public class RentalsRepository(RentalsContext context) : IRentalsRepository
     {
         return await Task.Run(() =>
         {
+            context.Entry(rental.Plan).State = EntityState.Unchanged;
+
             context.Update(rental);
 
             return rental;
+        });
+    }
 
+    public async Task<RentalEntity[]> GetAllAsync()
+    {
+        return await Task.Run(() =>
+        {
+            var rentals = context
+                            .Rentals
+                            .Include(r => r.Plan)
+                            .AsNoTracking();
+
+            return rentals.ToArray();
         });
     }
 
