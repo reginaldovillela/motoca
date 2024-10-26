@@ -28,6 +28,8 @@ public class GetRentalByIdQueryHandler(ILogger<GetRentalByIdQueryHandler> logger
                           rental.CreateAt, 
                           rental.StartDate, 
                           rental.ExpectedEndDate, 
-                          rental.ReturnDate);
+                          rental.ReturnDate,
+                          rental.AmountToPay,
+                          rental.IsActive);
     }
 }

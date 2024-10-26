@@ -40,7 +40,6 @@ public class RiderEntityMapping : IEntityTypeConfiguration<RiderEntity>
         builder.Property(r => r.BirthDate)
             .IsRequired()
             .HasColumnType("date");
-
     }
 }
 
@@ -50,12 +49,25 @@ public static class RiderEntityMappingExtensions
     {
         modelBuilder.ApplyConfiguration(new RiderEntityMapping());
 
+        var birthDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-20));
+
         var rider = new RiderEntity("entregador-exemplo",
                                     "Fulano de Tal",
-                                    "12345678900",
-                                    DateOnly.FromDateTime(DateTime.Today.AddYears(19)));
-        rider.SetDriversLicense("12345678900", "A");
+                                    birthDate);
 
         modelBuilder.Entity<RiderEntity>().HasData(rider);
+        modelBuilder
+            .Entity<DriversLicenseEntity>()
+            .HasData(new DriversLicenseEntity("1234567890", "A")
+            {
+                RiderEntityId = rider.EntityId,
+            });
+        modelBuilder
+            .Entity<RiderEntity>()
+            .OwnsOne(p => p.SocialId)
+            .HasData(new SocialIdVO("12345678900")
+            {
+                RiderEntityId = rider.EntityId
+            });
     }
 }

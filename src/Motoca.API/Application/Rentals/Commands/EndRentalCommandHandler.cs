@@ -36,6 +36,8 @@ public class EndRentalCommandHandler(ILogger<EndRentalCommandHandler> logger,
                           rentalToEnd.CreateAt, 
                           rentalToEnd.StartDate, 
                           rentalToEnd.ExpectedEndDate, 
-                          rentalToEnd.ReturnDate);
+                          rentalToEnd.ReturnDate,
+                          rentalToEnd.AmountToPay,
+                          rentalToEnd.IsActive);
     }
 }

@@ -5,6 +5,6 @@ namespace Motoca.SharedKernel.Message;
 public class GetRiderByIdResponse
 {
     public string? ErrorMessage { get; init; }
-    
-    public Rider Rider { get; init; }
+
+    public Rider Rider { get; init; } = null!;
 }

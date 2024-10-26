@@ -18,6 +18,6 @@ internal static class MigrationExtensions
         rentalsContext.Database.Migrate();
 
         using var ridersContext = scope.ServiceProvider.GetRequiredService<RidersContext>();
-        rentalsContext.Database.Migrate();
+        ridersContext.Database.Migrate();
     }
 }

@@ -24,7 +24,9 @@ public class GetRentalsQueryHandler(ILogger<GetRentalsQueryHandler> logger,
                                               p.CreateAt,
                                               p.StartDate,
                                               p.ExpectedEndDate,
-                                              p.ReturnDate))
+                                              p.ReturnDate,
+                                              p.AmountToPay,
+                                              p.IsActive))
                     .ToArray();
     }
 }

@@ -6,28 +6,40 @@ public class RidersStorageService : IRidersStorageService
 {
     private readonly string RootPath = AppDomain.CurrentDomain.BaseDirectory;
 
+    private readonly string RidersImages = "RidersImages";
+
     public async Task<byte[]> GetFileAsync(string fileName)
     {
-        var path = Path.Combine(RootPath, "Images", fileName);
+        var filePath = Path.Combine(RootPath, RidersImages, fileName);
 
-        var file = await File.ReadAllBytesAsync(path);
+        var fileInfo = new FileInfo(filePath);
+
+        if (!fileInfo.Exists)
+            return [];
+
+        var file = await File.ReadAllBytesAsync(filePath);
 
         return file;
     }
 
     public async Task<bool> SaveFileAsync(string fileName, byte[] file)
     {
-        var basePathImages = Path.Combine(RootPath, "Images");
-        CreatePathIfNotExists(basePathImages);
+        var imagesPath = Path.Combine(RootPath, RidersImages);
+        CreatePathIfNotExists(imagesPath);
 
-        var path = Path.Combine(basePathImages, fileName);
+        var filePath = Path.Combine(imagesPath, fileName);
 
-        await File.WriteAllBytesAsync(path, file);
+        var fileInfo = new FileInfo(filePath);
+
+        if (fileInfo.Exists)
+            fileInfo.Delete();
+
+        await File.WriteAllBytesAsync(filePath, file);
 
         return true;
     }
 
-    private void CreatePathIfNotExists(string path)
+    private static void CreatePathIfNotExists(string path)
     {
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);

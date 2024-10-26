@@ -12,13 +12,21 @@ services:
     ports:
       - 5432:5432
   
-  rabbitmq:
-    container_name: 'rabbitmq'
+  broker:
+    container_name: broker
     image: rabbitmq:4.0.2-management
-    hostname: 'rabbitmq'
+    hostname: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: rabbitmq
       RABBITMQ_DEFAULT_PASS: rabbitmq
     ports:
       - 5672:5672
       - 15672:15672
+
+  Motoca.Consumer:
+    image: ${DOCKER_REGISTRY-}motocaconsumer
+    build:
+      context: .
+      dockerfile: src/Motoca.Consumer/Dockerfile
+    depends_on:
+      - broker

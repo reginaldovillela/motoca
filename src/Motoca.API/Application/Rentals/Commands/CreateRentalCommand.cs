@@ -7,7 +7,7 @@ namespace Motoca.API.Application.Rentals.Commands;
 /// Dados para cadastrar uma locação
 /// </summary>
 [DisplayName("Locação > Dados Cadastrar")]
-public class CreateRentalCommand : IRequest<Rental?>
+public class CreateRentalCommand : IRequest<Rental>
 {
     /// <summary>
     /// Id do entregador cadastrado no sistema

@@ -14,7 +14,13 @@ public class RentalEntityMapping : IEntityTypeConfiguration<RentalEntity>
 
         builder.Ignore(r=> r.ExpectedEndDate);
 
-        builder.Ignore(r=> r.AmountToPay);
+        //builder.Ignore(r=> r.AmountToPay);
+
+        builder.Ignore(r=> r.IsActive);
+
+        builder.Ignore(r=> r.IsOverDue);
+
+        builder.Ignore(r=> r.DaysOverDue);
 
         builder.HasIndex(r => r.Id)
             .IsUnique();
@@ -35,8 +41,7 @@ public class RentalEntityMapping : IEntityTypeConfiguration<RentalEntity>
             .IsRequired();
 
         builder.Property(r => r.StartDate)
-            .IsRequired()
-            .HasColumnType("date");
+            .IsRequired();
     }
 }
 

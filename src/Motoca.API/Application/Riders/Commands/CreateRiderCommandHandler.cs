@@ -19,10 +19,8 @@ public class CreateRiderCommandHandler(ILogger<CreateRiderCommandHandler> logger
             throw new ConstraintException($"Já existe um entregador com o Id: {request.Id}");
         }
 
-        var newRider = new RiderEntity(request.Id,
-                                       request.Name,
-                                       request.SocialId,
-                                       request.BirthDate);
+        var newRider = new RiderEntity(request.Id, request.Name, request.BirthDate);
+        newRider.SetSocialId(request.SocialId);
         newRider.SetDriversLicense(request.DriversLicenseNumber,
                                    request.DriversLicenseCategory);
 

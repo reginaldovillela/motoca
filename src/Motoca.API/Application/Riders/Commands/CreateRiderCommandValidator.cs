@@ -30,8 +30,6 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
             .WithMessage("A {PropertyName} não foi informado")
             .Length(11)
             .WithMessage("O {PropertyName} precisa ter {MinLength} caracteres");
-        //.Matches("^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$")
-        //.WithMessage("A {PropertyName} precisa estar no formato 000.000.000-00");
 
         RuleFor(x => x.BirthDate)
             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now.AddYears(-18)))
@@ -42,7 +40,7 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
             .WithMessage("A {PropertyName} não pode ser vazia")
             .NotNull()
             .WithMessage("O {PropertyName} não foi informado")
-            .Length(5, 15)
+            .Length(1, 11)
             .WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
 
         RuleFor(x => x.DriversLicenseCategory)
@@ -52,6 +50,5 @@ public class CreateRiderCommandValidator : AbstractValidator<CreateRiderCommand>
             .WithMessage("O {PropertyName} não foi informado")
             .Must(x => driversLicenseLevelsAllowed.Contains(x))
             .WithMessage("O {PropertyName} precisa ser uma das opções: " + string.Join(", ", driversLicenseLevelsAllowed));
-            //.WithMessage("O {PropertyName} precisa ter entre {MinLength} e {MaxLength} caracteres");
     }
 }

@@ -3,8 +3,8 @@ using MassTransit;
 using MassTransit.Transports.Fabric;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Motoca.API.Application.Bikes.Services;
-using Motoca.API.Application.Riders.Services;
+using Motoca.API.Services.Bikes;
+using Motoca.API.Services.Riders;
 using Motoca.SharedKernel.Message;
 
 namespace Motoca.API.Extensions;
@@ -45,37 +45,26 @@ internal static class ServiceExtensions
 
         services.AddValidatorsFromAssemblyContaining<Program>(); //(ServiceLifetime.Singleton);
 
-        services.AddMassTransit(x =>
+        services.AddMassTransit(bus =>
         {
-            x.AddConsumer<GetBikeByIdConsumer>().Endpoint(e => e.Name = "get-bike-by-id");
-            x.AddRequestClient<GetBikeByIdRequest>(new Uri("exchange:get-bike-by-id"));
+            bus.SetKebabCaseEndpointNameFormatter();
 
-            x.AddConsumer<GetRiderByIdConsumer>().Endpoint(e => e.Name = "get-rider-by-id");
-            x.AddRequestClient<GetRiderByIdRequest>(new Uri("exchange:get-rider-by-id"));
+            bus.AddConsumer<GetBikeByIdConsumer>().Endpoint(e => e.Name = "get-bike-by-id");
+            bus.AddRequestClient<GetBikeByIdRequest>(new Uri("exchange:get-bike-by-id"));
 
-            // x.UsingInMemory((context, cfg) =>
-            // {
-            //     cfg.ConfigureEndpoints(context);
-            // });
+            bus.AddConsumer<GetRiderByIdConsumer>().Endpoint(e => e.Name = "get-rider-by-id");
+            bus.AddRequestClient<GetRiderByIdRequest>(new Uri("exchange:get-rider-by-id"));
 
-            x.UsingRabbitMq((context, cfg) =>
+            bus.UsingRabbitMq((context, brokerConfiguration) =>
             {
-                cfg.Host("localhost", "/", h =>
+                brokerConfiguration.Host("localhost", "/", h =>
                 {
                     h.Username("rabbitmq");
                     h.Password("rabbitmq");
                 });
 
-                // cfg.Host(new Uri("amqp://localhost:5672"), h =>
-                // {
-                //     h.Username("rabbitmq");
-                //     h.Password("rabbitmq");
-                // });
-
-                cfg.ConfigureEndpoints(context);
+                brokerConfiguration.ConfigureEndpoints(context);
             });
-
-
         });
     }
 }

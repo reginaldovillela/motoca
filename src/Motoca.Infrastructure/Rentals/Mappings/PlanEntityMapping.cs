@@ -32,6 +32,9 @@ public class PlanEntityMapping : IEntityTypeConfiguration<PlanEntity>
 
         builder.Property(r => r.ValuePerDay)
             .IsRequired();
+
+        builder.Property(r => r.PenaltyPercent)
+            .IsRequired();
     }
 }
 
@@ -42,11 +45,11 @@ public static class PlanEntityMappingExtensions
         modelBuilder.ApplyConfiguration(new PlanEntityMapping());
 
         modelBuilder.Entity<PlanEntity>().HasData(
-            new PlanEntity("plano7", 7, 30),
-            new PlanEntity("plano15", 15, 28),
-            new PlanEntity("plano30", 30, 22),
-            new PlanEntity("plano45", 45, 20),
-            new PlanEntity("plano50", 50, 18)
+            new PlanEntity("plano7", 7, 30, 20),
+            new PlanEntity("plano15", 15, 28, 40),
+            new PlanEntity("plano30", 30, 22, 0),
+            new PlanEntity("plano45", 45, 20, 0),
+            new PlanEntity("plano50", 50, 18, 0)
         );
     }
 }

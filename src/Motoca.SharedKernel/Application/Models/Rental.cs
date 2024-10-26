@@ -14,6 +14,8 @@ namespace Motoca.SharedKernel.Application.Models;
 /// <param name="StartDate">Data início da locação</param>
 /// <param name="ExpectedEndDate">Data previsão da locação</param>
 /// <param name="ReturnDate">Data/Hora devolução da locação</param>
+/// <param name="AmountToPay">Total a pagar</param>
+/// <param name="IsActive">Se a ocação está ativa ou não</param>
 [DisplayName("Locação > Dados Cadastrados")]
 public record Rental(
     Guid InternalId,
@@ -22,7 +24,9 @@ public record Rental(
     [property: JsonPropertyName("moto_id"), DefaultValue("moto-123"), Required] string BikeId,
     [property: JsonPropertyName("plano"), Required] Plan Plan,
     [property: JsonPropertyName("data_criacao"), DefaultDateTime, Required] DateTime CreateAt,
-    [property: JsonPropertyName("data_inicio"), DefaultDateOnly, Required] DateOnly StartDate,
-    [property: JsonPropertyName("data_previsao_termino"), DefaultDateOnly, Required] DateOnly ExpectedEndDate,
-    [property: JsonPropertyName("data_devolucao"), DefaultDateTime] DateTime? ReturnDate
+    [property: JsonPropertyName("data_inicio"), DefaultDateTime, Required] DateTime StartDate,
+    [property: JsonPropertyName("data_previsao_termino"), DefaultDateTime, Required] DateTime ExpectedEndDate,
+    [property: JsonPropertyName("data_devolucao"), DefaultDateTime] DateTime? ReturnDate,
+    [property: JsonPropertyName("total_pagar"), DefaultValue(0), Required] double AmountToPay,
+    [property: JsonPropertyName("ativo"), DefaultValue(false), Required] bool IsActive
 ) : Base(InternalId);

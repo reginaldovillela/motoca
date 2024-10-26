@@ -28,7 +28,7 @@ public class CreateRiderCommand : IRequest<Rider>
     /// <summary>
     /// CPF do entregador a ser cadastrado no sistema
     /// </summary>
-    [DefaultValue("000.000.000-00")]
+    [DefaultValue("12345678900")]
     [JsonPropertyName("cpf")]
     [Required]
     public string SocialId { get; init; } = string.Empty;

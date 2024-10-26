@@ -12,6 +12,8 @@ public class PlanEntity
 
     public double ValuePerDay { get; init; }
 
+    public double PenaltyPercent { get; init; }
+
     public ICollection<RentalEntity> Rentals { get; } = [];
 
     // ef required
@@ -19,10 +21,11 @@ public class PlanEntity
     protected PlanEntity() { }
 #pragma warning restore CS8618
 
-    public PlanEntity(string id, ushort defaultDuration, double valuePerDay)
+    public PlanEntity(string id, ushort defaultDuration, double valuePerDay, double penaltyPercent)
     {
         Id = id;
         DefaultDuration = defaultDuration;
         ValuePerDay = valuePerDay;
+        PenaltyPercent = penaltyPercent;
     }
 }

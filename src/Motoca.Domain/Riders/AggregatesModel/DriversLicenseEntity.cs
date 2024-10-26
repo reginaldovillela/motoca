@@ -11,7 +11,7 @@ public class DriversLicenseEntity
 
     public string Category { get; init; }
 
-    public virtual RiderEntity Rider { get; init; }
+    public RiderEntity Rider { get; init; } = null!;
 
     // ef required
 #pragma warning disable CS8618
