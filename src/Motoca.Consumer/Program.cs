@@ -1,7 +1,5 @@
-﻿using MassTransit;
-using Microsoft.Extensions.Hosting;
-using System.Reflection;
-using Motoca.SharedKernel.Message;
+﻿using Microsoft.Extensions.Hosting;
+using Motoca.Consumer;
 
 var builder = Host.CreateDefaultBuilder(args);
 
@@ -11,7 +9,7 @@ builder.ConfigureServices((hostContext, services) =>
     {
         bus.SetKebabCaseEndpointNameFormatter();
 
-        bus.AddConsumer<BikeHasBeenCreatedMessage>().Endpoint(e => e.Name = "bike-has-been-created");
+        bus.AddConsumer<BikeHasBeenCreatedMessageConsumer>().Endpoint(e => e.Name = "bike-has-been-created");
 
         bus.UsingRabbitMq((context, brokerConfiguration) =>
         {
@@ -28,4 +26,4 @@ builder.ConfigureServices((hostContext, services) =>
 
 var app = builder.Build();
 
-app.Run();
+await app.RunAsync();
