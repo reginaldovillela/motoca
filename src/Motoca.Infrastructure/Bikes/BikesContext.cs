@@ -1,6 +1,5 @@
 using Motoca.Domain.Bikes.AggregatesModel;
 using Motoca.Domain.SeedWork.Interfaces;
-using Motoca.Infrastructure.Bikes.Mappings;
 using Motoca.Infrastructure.Extensions;
 
 namespace Motoca.Infrastructure.Bikes;
@@ -9,7 +8,7 @@ public class BikesContext : DbContext, IUnitOfWork
 {
     private readonly IMediator _mediator;
 
-    private IDbContextTransaction _currentTransaction;
+    private IDbContextTransaction? _currentTransaction;
 
     public DbSet<BikeEntity> Bikes { get; set; }
 
@@ -19,25 +18,14 @@ public class BikesContext : DbContext, IUnitOfWork
         _mediator = mediator;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyBikeEntityMapping();
-        base.OnModelCreating(modelBuilder);
-    }
-
-    public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
+    public IDbContextTransaction GetCurrentTransaction() => _currentTransaction!;
 
     public bool HasActiveTransaction => _currentTransaction != null;
 
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
         if (_currentTransaction is not null)
-            return null;
+            return null!;
 
         _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Domain.SeedWork;
@@ -13,8 +15,11 @@ public abstract class Entity : IEntity
 
     private List<INotification> _domainEvents;
 
+    [Key]
+    [Column("InternalId")]
     public virtual Guid EntityId { get; protected set; }
 
+    [NotMapped]
     public List<INotification> DomainEvents => _domainEvents;
 
     protected Entity()

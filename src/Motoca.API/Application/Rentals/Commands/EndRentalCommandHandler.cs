@@ -31,11 +31,13 @@ public class EndRentalCommandHandler(ILogger<EndRentalCommandHandler> logger,
                           rentalToEnd.BikeId, 
                           new Plan(rentalToEnd.Plan.EntityId, 
                                    rentalToEnd.Plan.Id, 
-                                   rentalToEnd.Plan.DefaultDuration, 
+                                   rentalToEnd.Plan.DurationTime, 
                                    rentalToEnd.Plan.ValuePerDay), 
                           rentalToEnd.CreateAt, 
                           rentalToEnd.StartDate, 
                           rentalToEnd.ExpectedEndDate, 
-                          rentalToEnd.ReturnDate);
+                          rentalToEnd.ReturnDate,
+                          rentalToEnd.AmountToPay,
+                          rentalToEnd.IsActive);
     }
 }

@@ -9,7 +9,7 @@ public class GetBikesQueryHandler(ILogger<GetBikesQueryHandler> logger,
 {
     public async Task<Bike[]> Handle(GetBikesQuery request, CancellationToken cancellationToken)
     {
-        var bikes = await repository.GetAllAsync(request.LicensePlate);
+        var bikes = await repository.GetAllAsync(request.LicensePlate, cancellationToken);
 
         logger.LogInformation("Consulta concluída. Total de {@count} encontrados", bikes.Length);
 

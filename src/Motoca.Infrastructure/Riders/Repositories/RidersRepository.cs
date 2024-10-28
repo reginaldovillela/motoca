@@ -15,17 +15,15 @@ public class RidersRepository(RidersContext context) : IRidersRepository
         return rider;
     }
 
-    public async Task<RiderEntity[]> GetAllAsync()
+    public async Task<ICollection<RiderEntity>> GetAllAsync()
     {
-        return await Task.Run(() =>
-        {
-            var riders = context
-                             .Riders
-                             .Include(r => r.DriversLicense)
-                             .AsNoTracking();
+        var riders = await context
+                         .Riders
+                         .Include(r => r.DriversLicense)
+                         .AsNoTracking()
+                         .ToListAsync();
 
-            return riders.ToArray();
-        });
+        return riders;
     }
 
     public async Task<RiderEntity?> GetByEntityIdAsync(Guid entityId)

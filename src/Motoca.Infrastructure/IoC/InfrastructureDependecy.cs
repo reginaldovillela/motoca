@@ -56,7 +56,4 @@ public static class InfrastructureDependecy
 
         services.AddScoped<IRidersStorageService, RidersStorageService>();
     }
-
-    
-
 }

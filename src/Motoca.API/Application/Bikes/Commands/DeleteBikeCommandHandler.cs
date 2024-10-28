@@ -10,7 +10,7 @@ public class DeleteBikeCommandHandler(ILogger<DeleteBikeCommandHandler> logger,
 {
     public async Task<Bike?> Handle(DeleteBikeCommand request, CancellationToken cancellationToken)
     {
-        var bikeToDelete = await repository.GetByIdAsync(request.Id);
+        var bikeToDelete = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (bikeToDelete is null)
         {
@@ -30,7 +30,7 @@ public class DeleteBikeCommandHandler(ILogger<DeleteBikeCommandHandler> logger,
 
         logger.LogInformation("Deletando a moto: {@bike}", bikeToDelete);
 
-        _ = await repository.DeleteAsync(bikeToDelete);
+        _ = await repository.DeleteAsync(bikeToDelete, cancellationToken);
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

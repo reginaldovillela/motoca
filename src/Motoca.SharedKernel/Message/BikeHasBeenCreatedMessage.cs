@@ -2,9 +2,9 @@ using Motoca.SharedKernel.Application.Models;
 
 namespace Motoca.SharedKernel.Message;
 
-public class GetBikeByIdResponse
+public class BikeHasBeenCreatedMessage
 {
-    public string? ErrorMessage { get; init; }
+    public string Message { get; init; } = string.Empty;
 
     public Bike Bike { get; init; } = null!;
 }

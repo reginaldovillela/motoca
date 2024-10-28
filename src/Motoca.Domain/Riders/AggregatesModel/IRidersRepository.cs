@@ -6,7 +6,7 @@ public interface IRidersRepository : IRepository<RiderEntity>
 {
     Task<RiderEntity> AddAsync(RiderEntity rider);
 
-    Task<RiderEntity[]> GetAllAsync();
+    Task<ICollection<RiderEntity>> GetAllAsync();
 
     Task<RiderEntity?> GetByEntityIdAsync(Guid entityId);
 

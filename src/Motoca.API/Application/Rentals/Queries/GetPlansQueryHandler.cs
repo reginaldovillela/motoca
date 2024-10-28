@@ -11,11 +11,11 @@ public class GetPlansQueryHandler(ILogger<GetPlansQueryHandler> logger,
     {
         var plans = await repository.GetAllAsync();
 
-        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", plans.Length);
+        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", plans.Count);
 
         return plans.Select(p => new Plan(p.EntityId,
                                           p.Id,
-                                          p.DefaultDuration,
+                                          p.DurationTime,
                                           p.ValuePerDay))
                     .ToArray();
     }

@@ -11,7 +11,7 @@ public class ChangeLicensePlateBikeCommandHandler(ILogger<ChangeLicensePlateBike
     public async Task<Bike?> Handle(ChangeLicensePlateBikeCommand request, CancellationToken cancellationToken)
     {
         // busca os dados da moto no banco de dados
-        var bikeToChangeLicensePlate = await repository.GetByIdAsync(request.Id);
+        var bikeToChangeLicensePlate = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (bikeToChangeLicensePlate is null)
         {
@@ -27,7 +27,7 @@ public class ChangeLicensePlateBikeCommandHandler(ILogger<ChangeLicensePlateBike
         }
 
         // verifica se tem outra moto com essa placa no sistema
-        var hasAnyBikeWithLicensePlate = await repository.HasAnyBikeWithLicensePlate(request.LicensePlate);
+        var hasAnyBikeWithLicensePlate = await repository.HasAnyBikeWithLicensePlate(request.LicensePlate, cancellationToken);
 
         if (hasAnyBikeWithLicensePlate)
         {
@@ -37,7 +37,7 @@ public class ChangeLicensePlateBikeCommandHandler(ILogger<ChangeLicensePlateBike
 
         bikeToChangeLicensePlate!.SetLicensePlate(request.LicensePlate);
 
-        _ = await repository.UpdateLicensePlateAsync(bikeToChangeLicensePlate);
+        _ = await repository.UpdateLicensePlateAsync(bikeToChangeLicensePlate, cancellationToken);
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

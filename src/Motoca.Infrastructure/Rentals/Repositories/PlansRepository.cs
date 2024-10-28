@@ -7,12 +7,12 @@ public class PlansRepository(RentalsContext context) : IPlansRepository
 {
     public IUnitOfWork UnitOfWork => context;
 
-    public async Task<PlanEntity[]> GetAllAsync()
+    public async Task<ICollection<PlanEntity>> GetAllAsync()
     {
         var plans = await context
                             .Plans
                             .AsNoTracking()
-                            .ToArrayAsync();
+                            .ToListAsync();
 
         return plans;
     }

@@ -23,11 +23,13 @@ public class GetRentalByIdQueryHandler(ILogger<GetRentalByIdQueryHandler> logger
                           rental.BikeId, 
                           new Plan(rental.Plan.EntityId, 
                                    rental.Plan.Id, 
-                                   rental.Plan.DefaultDuration, 
+                                   rental.Plan.DurationTime, 
                                    rental.Plan.ValuePerDay), 
                           rental.CreateAt, 
                           rental.StartDate, 
                           rental.ExpectedEndDate, 
-                          rental.ReturnDate);
+                          rental.ReturnDate,
+                          rental.AmountToPay,
+                          rental.IsActive);
     }
 }

@@ -10,25 +10,66 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
                                         IRentalsRepository rentalsRepository,
                                         IPlansRepository plansRepository,
                                         IRequestClient<GetBikeByIdRequest> bikeConsumer,
-                                        IRequestClient<GetRiderByIdRequest> riderConsumer) : IRequestHandler<CreateRentalCommand, Rental?>
+                                        IRequestClient<GetRiderByIdRequest> riderConsumer) : IRequestHandler<CreateRentalCommand, Rental>
 {
-    public async Task<Rental?> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
+    public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {
         var plan = await plansRepository.GetByIdAsync(request.PlanId);
 
         if (plan is null)
         {
-            logger.LogInformation("O plano {@Name} não foi encontrado", request.BikeId);
-            return null;
+            logger.LogInformation("O plano {@PlanId} não foi encontrado", request.PlanId);
+            throw new InvalidOperationException($"O plano {request.PlanId} não foi encontrado");
         }
 
-        //Todo - Verificar se a moto existe
+        // Verificar se a moto existe
         var getBikeRequest = new GetBikeByIdRequest { BikeId = request.BikeId };
         var getBikeResponse = await bikeConsumer.GetResponse<GetBikeByIdResponse>(getBikeRequest, cancellationToken);
 
-        //Todo - Verificar se entregador existe
+        var messageBike = getBikeResponse.Message;
+
+        if (!string.IsNullOrEmpty(messageBike.ErrorMessage))
+        {
+            logger.LogInformation("A moto {@BikeId} não foi encontrada", request.BikeId);
+            throw new InvalidOperationException($"A moto {request.BikeId} não foi encontrada");
+        }
+
+        // Verifica se a moto já está alugada
+        var bikeHasAlreadyRentaled =  await rentalsRepository.BikeHasAlreadyRentaled(messageBike.Bike.Id);
+
+        if (bikeHasAlreadyRentaled is not null)
+        {
+            logger.LogInformation("A moto {@BikeId} já está alugada", request.BikeId);
+            throw new InvalidOperationException($"A moto {request.BikeId}  já está alugada");
+        }
+
+        // Verificar se o entregador existe
         var getRiderRequest = new GetRiderByIdRequest { RiderId = request.RiderId };
         var getRiderResponse = await riderConsumer.GetResponse<GetRiderByIdResponse>(getRiderRequest, cancellationToken);
+
+        var messageRider = getRiderResponse.Message;
+
+        if (!string.IsNullOrEmpty(messageRider.ErrorMessage))
+        {
+            logger.LogInformation("O entregador {@RiderId} não foi encontrado", request.RiderId);
+            throw new InvalidOperationException($"O entregador {request.RiderId} não foi encontrado");
+        }
+
+         // Verifica se o entregador já tem um aluguél ativos
+        var riderHasAActiveRental =  await rentalsRepository.RiderHasAActiveRental(messageRider.Rider.Id);
+
+        if (riderHasAActiveRental is not null)
+        {
+            logger.LogInformation("O entregador {@RiderId} já possui o aluguel ativo", request.RiderId);
+            throw new InvalidOperationException($"O entregador {request.RiderId} já possui o aluguel ativo");
+        }
+
+        // Verifica se o entregador é da Categoria A
+        if (messageRider.Rider.DriversLicense.DriversLicenseCategory != "A")
+        {
+            logger.LogInformation("O entregador {@RiderId} não possui a categoria de CNH adequada", request.RiderId);
+            throw new InvalidOperationException($"O entregador {request.RiderId} não possui a categoria de CNH adequada");
+        }
 
         var newRental = new RentalEntity(request.RiderId, request.BikeId, plan);
 
@@ -42,11 +83,13 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
                           newRental.BikeId,
                           new Plan(newRental.Plan.EntityId,
                                    newRental.Plan.Id,
-                                   newRental.Plan.DefaultDuration,
+                                   newRental.Plan.DurationTime,
                                    newRental.Plan.ValuePerDay),
                           newRental.CreateAt,
                           newRental.StartDate,
                           newRental.ExpectedEndDate,
-                          newRental.ReturnDate);
+                          newRental.ReturnDate,
+                          newRental.AmountToPay,
+                          newRental.IsActive);
     }
 }
