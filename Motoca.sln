@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7016A60B-AE6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motoca.Consumer", "src\Motoca.Consumer\Motoca.Consumer.csproj", "{244754FE-DD25-4599-94BD-12CDAE6034B7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EC1A57CC-4C6F-4777-BA63-C71CB4BEB747}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,5 +53,8 @@ Global
 		{C06E1850-E6CA-4A62-B28E-0834D0123B46} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
 		{D62D4554-0736-4C75-A3A6-6CA420169D79} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
 		{244754FE-DD25-4599-94BD-12CDAE6034B7} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5ACEAA15-5897-4411-84DB-7DFBDBC009C6}
 	EndGlobalSection
 EndGlobal
