@@ -38,6 +38,8 @@ internal static class ServiceExtensions
     {
         var services = builder.Services;
 
+        var config = builder.Configuration;
+
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssemblyContaining<Program>();
@@ -57,10 +59,10 @@ internal static class ServiceExtensions
 
             bus.UsingRabbitMq((context, brokerConfiguration) =>
             {
-                brokerConfiguration.Host("localhost", "/", h =>
+                brokerConfiguration.Host(config["broker:host"], "/", h =>
                 {
-                    h.Username("rabbitmq");
-                    h.Password("rabbitmq");
+                    h.Username(config["broker:user"]!);
+                    h.Password(config["broker:pass"]!);
                 });
 
                 brokerConfiguration.ConfigureEndpoints(context);

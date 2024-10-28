@@ -13,7 +13,7 @@ builder.ConfigureServices((hostContext, services) =>
 
         bus.UsingRabbitMq((context, brokerConfiguration) =>
         {
-            brokerConfiguration.Host("localhost", "/", h =>
+            brokerConfiguration.Host("rabbitmq", "/", h =>
             {
                 h.Username("rabbitmq");
                 h.Password("rabbitmq");
