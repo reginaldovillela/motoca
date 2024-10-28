@@ -3,7 +3,8 @@ using Motoca.Domain.SeedWork.Interfaces;
 
 namespace Motoca.Infrastructure.Rentals.Repositories;
 
-public class RentalsRepository(RentalsContext context) : IRentalsRepository
+public class RentalsRepository(RentalsContext context)
+    : IRentalsRepository
 {
     public IUnitOfWork UnitOfWork => context;
 
@@ -12,6 +13,18 @@ public class RentalsRepository(RentalsContext context) : IRentalsRepository
         context.Entry(rental.Plan).State = EntityState.Unchanged;
 
         _ = await context.AddAsync(rental);
+
+        return rental;
+    }
+
+    public async Task<RentalEntity?> BikeHasAlreadyRentaled(string bikeId)
+    {
+        var rental = await context
+                                .Rentals
+                                .OrderByDescending(r => r.StartDate)
+                                .Where(r => r.BikeId == bikeId &&
+                                           r.ReturnDate == null)
+                                .FirstOrDefaultAsync();
 
         return rental;
     }
@@ -28,17 +41,16 @@ public class RentalsRepository(RentalsContext context) : IRentalsRepository
         });
     }
 
-    public async Task<RentalEntity[]> GetAllAsync()
+    public async Task<ICollection<RentalEntity>> GetAllAsync()
     {
-        return await Task.Run(() =>
-        {
-            var rentals = context
-                            .Rentals
-                            .Include(r => r.Plan)
-                            .AsNoTracking();
+        var rentals = await context
+                                .Rentals
+                                .Include(r => r.Plan)
+                                .AsNoTracking()
+                                .ToListAsync();
 
-            return rentals.ToArray();
-        });
+        return rentals;
+
     }
 
     public async Task<RentalEntity?> GetByEntityIdAsync(Guid entityId)
@@ -61,6 +73,18 @@ public class RentalsRepository(RentalsContext context) : IRentalsRepository
                             .Where(p => p.Id == rentalId)
                             .AsNoTracking()
                             .SingleOrDefaultAsync();
+
+        return rental;
+    }
+
+    public async Task<RentalEntity?> RiderHasAActiveRental(string riderId)
+    {
+        var rental = await context
+                                .Rentals
+                                .OrderByDescending(r => r.StartDate)
+                                .Where(r => r.RiderId == riderId &&
+                                           r.ReturnDate == null)
+                                .FirstOrDefaultAsync();
 
         return rental;
     }

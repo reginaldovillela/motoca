@@ -12,5 +12,5 @@ public record Plan(
     Guid InternalId,
     [property:JsonPropertyName("id"), DefaultValue("plano-123"), Required] string Id,
     [property:JsonPropertyName("duracao_padrao"), DefaultValue("1"), Required] ushort DefaultDuration,
-    [property:JsonPropertyName("valor_diaria"), DefaultValue("0.0"), Required] double ValuePerDay
+    [property:JsonPropertyName("valor_diaria"), DefaultValue("0.0"), Required] decimal ValuePerDay
 ) : Base(InternalId);

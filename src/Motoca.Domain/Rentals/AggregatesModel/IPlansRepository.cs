@@ -4,7 +4,7 @@ namespace Motoca.Domain.Rentals.AggregatesModel;
 
 public interface IPlansRepository : IRepository<PlanEntity>
 {
-    Task<PlanEntity[]> GetAllAsync();
+    Task<ICollection<PlanEntity>> GetAllAsync();
 
     Task<PlanEntity?> GetByEntityIdAsync(Guid entityId);
 

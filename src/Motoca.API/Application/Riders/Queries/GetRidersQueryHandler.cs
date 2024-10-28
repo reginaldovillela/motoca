@@ -11,7 +11,7 @@ public class GetRidersQueryHandler(ILogger<GetRidersQueryHandler> logger,
     {
         var riders = await repository.GetAllAsync();
 
-         logger.LogInformation("Consulta concluída. Total de {@count} encontrados", riders.Length);
+         logger.LogInformation("Consulta concluída. Total de {@count} encontrados", riders.Count);
 
         return riders.Select(r => new Rider(r.EntityId, 
                                             r.Id, 

@@ -34,7 +34,16 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
             throw new InvalidOperationException($"A moto {request.BikeId} não foi encontrada");
         }
 
-        // Verificar se entregador existe
+        // Verifica se a moto já está alugada
+        var bikeHasAlreadyRentaled =  await rentalsRepository.BikeHasAlreadyRentaled(messageBike.Bike.Id);
+
+        if (bikeHasAlreadyRentaled is not null)
+        {
+            logger.LogInformation("A moto {@BikeId} já está alugada", request.BikeId);
+            throw new InvalidOperationException($"A moto {request.BikeId}  já está alugada");
+        }
+
+        // Verificar se o entregador existe
         var getRiderRequest = new GetRiderByIdRequest { RiderId = request.RiderId };
         var getRiderResponse = await riderConsumer.GetResponse<GetRiderByIdResponse>(getRiderRequest, cancellationToken);
 
@@ -46,6 +55,16 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
             throw new InvalidOperationException($"O entregador {request.RiderId} não foi encontrado");
         }
 
+         // Verifica se o entregador já tem um aluguél ativos
+        var riderHasAActiveRental =  await rentalsRepository.RiderHasAActiveRental(messageRider.Rider.Id);
+
+        if (riderHasAActiveRental is not null)
+        {
+            logger.LogInformation("O entregador {@RiderId} já possui o aluguel ativo", request.RiderId);
+            throw new InvalidOperationException($"O entregador {request.RiderId} já possui o aluguel ativo");
+        }
+
+        // Verifica se o entregador é da Categoria A
         if (messageRider.Rider.DriversLicense.DriversLicenseCategory != "A")
         {
             logger.LogInformation("O entregador {@RiderId} não possui a categoria de CNH adequada", request.RiderId);
@@ -64,7 +83,7 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
                           newRental.BikeId,
                           new Plan(newRental.Plan.EntityId,
                                    newRental.Plan.Id,
-                                   newRental.Plan.DefaultDuration,
+                                   newRental.Plan.DurationTime,
                                    newRental.Plan.ValuePerDay),
                           newRental.CreateAt,
                           newRental.StartDate,

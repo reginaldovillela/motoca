@@ -27,6 +27,6 @@ public record Rental(
     [property: JsonPropertyName("data_inicio"), DefaultDateTime, Required] DateTime StartDate,
     [property: JsonPropertyName("data_previsao_termino"), DefaultDateTime, Required] DateTime ExpectedEndDate,
     [property: JsonPropertyName("data_devolucao"), DefaultDateTime] DateTime? ReturnDate,
-    [property: JsonPropertyName("total_pagar"), DefaultValue(0), Required] double AmountToPay,
+    [property: JsonPropertyName("total_pagar"), DefaultValue(0), Required] decimal AmountToPay,
     [property: JsonPropertyName("ativo"), DefaultValue(false), Required] bool IsActive
 ) : Base(InternalId);

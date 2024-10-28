@@ -9,7 +9,6 @@ namespace Motoca.API.Application.Bikes.Commands;
 #pragma warning disable 1591
 public class CreateBikeCommandHandler(ILogger<CreateBikeCommandHandler> logger,
                                       IBikesRepository repository,
-                                      IBus bus,
                                       IPublishEndpoint publishEndpoint) : IRequestHandler<CreateBikeCommand, Bike>
 {
     public async Task<Bike> Handle(CreateBikeCommand request, CancellationToken cancellationToken)
@@ -53,10 +52,8 @@ public class CreateBikeCommandHandler(ILogger<CreateBikeCommandHandler> logger,
             Bike = bike
         };
 
-        //await bus.Send(messageBikeHasBeenCreated, cancellationToken);
         await publishEndpoint.Publish(messageBikeHasBeenCreated, cancellationToken);
         
-
         logger.LogInformation("Criando o registro da moto: {@bike}", bike);
 
         return bike;

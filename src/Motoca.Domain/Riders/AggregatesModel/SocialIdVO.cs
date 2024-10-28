@@ -1,19 +1,26 @@
-using System.Runtime.Serialization;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Motoca.Domain.SeedWork;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 
-public class SocialIdVO : ValueObject<SocialIdVO>
+[ComplexType]
+public class SocialIdVO : ValueObject
 {
-    [IgnoreDataMember]
-    public Guid RiderEntityId { get; init; }
+    [Column("SocialId")]
+    [Length(11, 11)]
+    [MaxLength(11)]
+    [Required]
+    [StringLength(11, MinimumLength = 11)]
+    public string Number { get; private init; }
 
-    public string Number { get; init; }
+    #region "ef requirements and relations"
 
-    // ef required
 #pragma warning disable CS8618
     protected SocialIdVO() { }
 #pragma warning restore CS8618
+
+    #endregion
 
     public SocialIdVO(string number)
     {
@@ -22,6 +29,6 @@ public class SocialIdVO : ValueObject<SocialIdVO>
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        throw new NotImplementedException();
+        yield return Number;
     }
 }

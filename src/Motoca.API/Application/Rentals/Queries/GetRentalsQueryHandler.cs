@@ -11,7 +11,7 @@ public class GetRentalsQueryHandler(ILogger<GetRentalsQueryHandler> logger,
     {
         var rentals = await repository.GetAllAsync();
 
-        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", rentals.Length);
+        logger.LogInformation("Consulta concluída. Total de {@count} encontrados", rentals.Count);
 
         return rentals.Select(p => new Rental(p.EntityId,
                                               p.Id,
@@ -19,7 +19,7 @@ public class GetRentalsQueryHandler(ILogger<GetRentalsQueryHandler> logger,
                                               p.BikeId,
                                               new Plan(p.Plan.EntityId,
                                                       p.Plan.Id,
-                                                      p.Plan.DefaultDuration,
+                                                      p.Plan.DurationTime,
                                                       p.Plan.ValuePerDay),
                                               p.CreateAt,
                                               p.StartDate,
