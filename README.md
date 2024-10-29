@@ -63,3 +63,4 @@ http://localhost:8080/swagger
 - Migrations With EF Core
 - IoC and DI
 - Extensions Patterns
+- Validators With FluentValidation
