@@ -23,6 +23,27 @@ A system to manage easily motorcycles, bikers and motorcycle rentals.
 
 ---
 
+### VS Code
+
+1. On VS Code terminal run:
+```
+docker-compose up --build api --build consumer
+```
+![vscode](docs/vscode-001.png)
+
+2. After a while, terminal will start to get containers logs, and then, you'll be able to see motoca-consumer container logs.
+![vscode](docs/vscode-002.png)
+![vscode](docs/vscode-003.png)
+
+3. The API Swagger page will not open together. You should do it yourself
+```
+http://localhost:8080/swagger
+```
+![api](docs/api-001.png)
+
+4. A result after a new bike had been included
+![vscode](docs/vscode-004.png)
+
 ## What I did and used?
 
 1. Techs
@@ -31,7 +52,7 @@ A system to manage easily motorcycles, bikers and motorcycle rentals.
 - Docker
 - Docker Compose to start services
 - Postgres as Database System
-- RabbitMQ as Broker System
+- RabbitMQ as Message Queue Broker System
 
 2. Design Patterns
 - DDD
