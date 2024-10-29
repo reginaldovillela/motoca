@@ -1,4 +1,5 @@
 using Motoca.SharedKernel.Message;
+using System.Text.Json;
 
 namespace Motoca.Consumer;
 
@@ -8,7 +9,14 @@ public class BikeHasBeenCreatedMessageConsumer : IConsumer<BikeHasBeenCreatedMes
     {
         await Task.Run(() =>
         {
-            Console.WriteLine($"Uma nova moto foi cadastrada: {context.Message}");
+            var bike = context.Message.Bike;
+
+            if (bike.Year >= 2024)
+            {
+                var bikeJson = JsonSerializer.Serialize(bike);
+
+                Console.WriteLine($"Uma nova moto foi cadastrada: {bikeJson!}");
+            }
         });
     }
 }

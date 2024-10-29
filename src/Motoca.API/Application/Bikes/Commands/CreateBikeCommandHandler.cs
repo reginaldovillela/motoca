@@ -54,7 +54,7 @@ public class CreateBikeCommandHandler(ILogger<CreateBikeCommandHandler> logger,
 
         await publishEndpoint.Publish(messageBikeHasBeenCreated, cancellationToken);
         
-        logger.LogInformation("Criando o registro da moto: {@bike}", bike);
+        logger.LogInformation("Criando o registro da moto: {@Bike}", bike);
 
         return bike;
     }

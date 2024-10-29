@@ -53,6 +53,12 @@ namespace Motoca.Infrastructure.Migrations.Riders
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_riders_SocialId",
+                table: "riders",
+                column: "SocialId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_riders_drivers_licenses_RiderEntityId",
                 table: "riders_drivers_licenses",
                 column: "RiderEntityId",

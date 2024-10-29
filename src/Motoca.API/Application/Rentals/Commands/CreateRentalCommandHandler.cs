@@ -40,7 +40,7 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
         if (bikeHasAlreadyRentaled is not null)
         {
             logger.LogInformation("A moto {@BikeId} já está alugada", request.BikeId);
-            throw new InvalidOperationException($"A moto {request.BikeId}  já está alugada");
+            throw new InvalidOperationException($"A moto {request.BikeId} já está alugada");
         }
 
         // Verificar se o entregador existe

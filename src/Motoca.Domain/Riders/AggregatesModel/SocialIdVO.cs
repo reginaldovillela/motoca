@@ -1,6 +1,6 @@
+using Motoca.Domain.SeedWork;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Motoca.Domain.SeedWork;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 
