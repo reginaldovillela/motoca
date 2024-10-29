@@ -10,7 +10,7 @@ public class UpdateDriversLicenseRiderCommandHandler(ILogger<UpdateDriversLicens
 {
     public async Task<Rider?> Handle(UpdateDriversLicenseRiderCommand request, CancellationToken cancellationToken)
     {
-        var riderToUpdateDriversLicense = await repository.GetByIdAsync(request.Id);
+        var riderToUpdateDriversLicense = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (riderToUpdateDriversLicense is null)
         {

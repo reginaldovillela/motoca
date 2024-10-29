@@ -12,7 +12,7 @@ public class EndRentalCommand : IRequest<Rental?>
     /// <summary>
     /// Id da locação cadastrada no sistema
     /// </summary>
-    //[DefaultValue("entregador-123")]
+    [DefaultValue("locacao-123")]
     [JsonIgnore]
     [JsonPropertyName("id")]
     [Required]

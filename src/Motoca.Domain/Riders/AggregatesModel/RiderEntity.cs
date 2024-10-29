@@ -1,9 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Motoca.Domain.Riders.Exceptions;
 using Motoca.Domain.SeedWork;
 using Motoca.Domain.SeedWork.Interfaces;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Motoca.Domain.Riders.AggregatesModel;
 

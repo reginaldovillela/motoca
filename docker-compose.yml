@@ -1,0 +1,64 @@
+name: motoca
+
+services:
+  db:
+    container_name: db
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: motoca
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+  
+  broker:
+    container_name: broker
+    image: rabbitmq:4.0.2-management
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 2
+
+  api:
+    container_name: api
+    image: ${DOCKER_REGISTRY-}motoca-api
+    build:
+      context: .
+      dockerfile: src/Motoca.API/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+    links:
+      - db
+      - broker
+    restart: always
+
+  consumer:
+    container_name: consumer
+    image: ${DOCKER_REGISTRY-}motoca-consumer
+    build:
+      context: .
+      dockerfile: src/Motoca.Consumer/Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    links:
+      - broker
+    restart: always
+  
+

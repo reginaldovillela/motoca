@@ -4,13 +4,13 @@ namespace Motoca.Domain.Riders.AggregatesModel;
 
 public interface IRidersRepository : IRepository<RiderEntity>
 {
-    Task<RiderEntity> AddAsync(RiderEntity rider);
+    Task<RiderEntity> AddAsync(RiderEntity rider, CancellationToken cancellationToken);
 
-    Task<ICollection<RiderEntity>> GetAllAsync();
+    Task<ICollection<RiderEntity>> GetAllAsync(CancellationToken cancellationToken);
 
-    Task<RiderEntity?> GetByEntityIdAsync(Guid entityId);
+    Task<RiderEntity?> GetByEntityIdAsync(Guid entityId, CancellationToken cancellationToken);
 
-    Task<RiderEntity?> GetByIdAsync(string riderId);
+    Task<RiderEntity?> GetByIdAsync(string riderId, CancellationToken cancellationToken);
 
-    Task<bool> HasAnyRiderWithId(string riderId);
+    Task<bool> HasAnyRiderWithId(string riderId, CancellationToken cancellationToken);
 }

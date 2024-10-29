@@ -14,7 +14,7 @@ public class GetRiderByIdConsumer(ILogger<GetRiderByIdConsumer> logger,
     {
         try
         {
-            var rider = await repository.GetByIdAsync(context.Message.RiderId);
+            var rider = await repository.GetByIdAsync(context.Message.RiderId, new CancellationToken());
 
             if (rider is null)
             {

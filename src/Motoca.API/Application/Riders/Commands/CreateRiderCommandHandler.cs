@@ -11,7 +11,7 @@ public class CreateRiderCommandHandler(ILogger<CreateRiderCommandHandler> logger
 {
     public async Task<Rider> Handle(CreateRiderCommand request, CancellationToken cancellationToken)
     {
-        var hasAnyRiderWithId = await repository.HasAnyRiderWithId(request.Id);
+        var hasAnyRiderWithId = await repository.HasAnyRiderWithId(request.Id, cancellationToken);
 
         if (hasAnyRiderWithId)
         {
@@ -26,14 +26,14 @@ public class CreateRiderCommandHandler(ILogger<CreateRiderCommandHandler> logger
 
         var driversLicenseImageBytes = Convert.FromBase64String(request.DriversLicenseImage);
 
-        _ = await repository.AddAsync(newRider);
+        _ = await repository.AddAsync(newRider, cancellationToken);
 
         _ = await storageService.SaveFileAsync(newRider.DriversLicense.EntityId.ToString(),
                                                driversLicenseImageBytes);
 
         _ = await repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        logger.LogInformation("Salvando no entregador @{rider}", newRider);
+        logger.LogInformation("Salvando no entregador @{Rider}", newRider);
 
         return new Rider(newRider.EntityId,
                          newRider.Id,

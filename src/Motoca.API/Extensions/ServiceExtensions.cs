@@ -1,11 +1,11 @@
-using System.Reflection;
 using MassTransit;
-using MassTransit.Transports.Fabric;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Motoca.API.Services.Bikes;
+using Motoca.API.Services.Rentals;
 using Motoca.API.Services.Riders;
 using Motoca.SharedKernel.Message;
+using System.Reflection;
 
 namespace Motoca.API.Extensions;
 
@@ -38,13 +38,17 @@ internal static class ServiceExtensions
     {
         var services = builder.Services;
 
+        var config = builder.Configuration;
+
+        // mediatr
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssemblyContaining<Program>();
         });
 
-        services.AddValidatorsFromAssemblyContaining<Program>(); //(ServiceLifetime.Singleton);
+        services.AddValidatorsFromAssemblyContaining<Program>();
 
+        // masstransit
         services.AddMassTransit(bus =>
         {
             bus.SetKebabCaseEndpointNameFormatter();
@@ -55,12 +59,15 @@ internal static class ServiceExtensions
             bus.AddConsumer<GetRiderByIdConsumer>().Endpoint(e => e.Name = "get-rider-by-id");
             bus.AddRequestClient<GetRiderByIdRequest>(new Uri("exchange:get-rider-by-id"));
 
+            bus.AddConsumer<GetBikeHasRentalsConsumer>().Endpoint(e => e.Name = "get-bike-has-rentals");
+            bus.AddRequestClient<GetBikeHasRentalsRequest>(new Uri("exchange:get-bike-has-rentals"));
+
             bus.UsingRabbitMq((context, brokerConfiguration) =>
             {
-                brokerConfiguration.Host("localhost", "/", h =>
+                brokerConfiguration.Host(config["broker:host"], "/", h =>
                 {
-                    h.Username("rabbitmq");
-                    h.Password("rabbitmq");
+                    h.Username(config["broker:user"]!);
+                    h.Password(config["broker:pass"]!);
                 });
 
                 brokerConfiguration.ConfigureEndpoints(context);

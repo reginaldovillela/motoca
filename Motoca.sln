@@ -3,21 +3,26 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.API", "src\Motoca.API\Motoca.API.csproj", "{562943CA-6E6A-4546-B502-ED61FCD6CA37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motoca.API", "src\Motoca.API\Motoca.API.csproj", "{562943CA-6E6A-4546-B502-ED61FCD6CA37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.SharedKernel", "src\Motoca.SharedKernel\Motoca.SharedKernel.csproj", "{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motoca.SharedKernel", "src\Motoca.SharedKernel\Motoca.SharedKernel.csproj", "{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.Domain", "src\Motoca.Domain\Motoca.Domain.csproj", "{C06E1850-E6CA-4A62-B28E-0834D0123B46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motoca.Domain", "src\Motoca.Domain\Motoca.Domain.csproj", "{C06E1850-E6CA-4A62-B28E-0834D0123B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Motoca.Infrastructure", "src\Motoca.Infrastructure\Motoca.Infrastructure.csproj", "{D62D4554-0736-4C75-A3A6-6CA420169D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motoca.Infrastructure", "src\Motoca.Infrastructure\Motoca.Infrastructure.csproj", "{D62D4554-0736-4C75-A3A6-6CA420169D79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7016A60B-AE64-4217-9BC7-3EB21BD480F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Motoca.Consumer", "src\Motoca.Consumer\Motoca.Consumer.csproj", "{244754FE-DD25-4599-94BD-12CDAE6034B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{EC1A57CC-4C6F-4777-BA63-C71CB4BEB747}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{27FA3AD0-90D5-4277-AE85-32554DDF05E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{562943CA-6E6A-4546-B502-ED61FCD6CA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,5 +41,26 @@ Global
 		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D62D4554-0736-4C75-A3A6-6CA420169D79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{244754FE-DD25-4599-94BD-12CDAE6034B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{244754FE-DD25-4599-94BD-12CDAE6034B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{244754FE-DD25-4599-94BD-12CDAE6034B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{244754FE-DD25-4599-94BD-12CDAE6034B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27FA3AD0-90D5-4277-AE85-32554DDF05E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27FA3AD0-90D5-4277-AE85-32554DDF05E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27FA3AD0-90D5-4277-AE85-32554DDF05E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27FA3AD0-90D5-4277-AE85-32554DDF05E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{562943CA-6E6A-4546-B502-ED61FCD6CA37} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
+		{AA165FE0-1C1C-4DEC-9C58-FF44B32FE7A5} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
+		{C06E1850-E6CA-4A62-B28E-0834D0123B46} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
+		{D62D4554-0736-4C75-A3A6-6CA420169D79} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
+		{244754FE-DD25-4599-94BD-12CDAE6034B7} = {7016A60B-AE64-4217-9BC7-3EB21BD480F6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5ACEAA15-5897-4411-84DB-7DFBDBC009C6}
 	EndGlobalSection
 EndGlobal

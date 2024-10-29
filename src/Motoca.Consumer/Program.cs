@@ -1,21 +1,28 @@
-﻿using MassTransit;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
-using Motoca.SharedKernel.Message;
+using Microsoft.Extensions.Logging;
+using Motoca.Consumer;
 
 var builder = Host.CreateDefaultBuilder(args);
 
 builder.ConfigureServices((hostContext, services) =>
 {
+    services.AddLogging(log =>
+    {
+        log.AddFilter("Microsoft", LogLevel.Warning)
+           .AddFilter("System", LogLevel.Warning)
+           .AddConsole();
+    });
+
     services.AddMassTransit(bus =>
     {
         bus.SetKebabCaseEndpointNameFormatter();
 
-        bus.AddConsumer<BikeHasBeenCreatedMessage>().Endpoint(e => e.Name = "bike-has-been-created");
+        bus.AddConsumer<BikeHasBeenCreatedMessageConsumer>().Endpoint(e => e.Name = "bike-has-been-created");
 
         bus.UsingRabbitMq((context, brokerConfiguration) =>
         {
-            brokerConfiguration.Host("localhost", "/", h =>
+            brokerConfiguration.Host("rabbitmq", "/", h =>
             {
                 h.Username("rabbitmq");
                 h.Password("rabbitmq");
@@ -28,4 +35,7 @@ builder.ConfigureServices((hostContext, services) =>
 
 var app = builder.Build();
 
-app.Run();
+Console.Clear();
+Console.WriteLine("### Consumer aguardando novos cadastros de motos!! ###");
+
+await app.RunAsync();

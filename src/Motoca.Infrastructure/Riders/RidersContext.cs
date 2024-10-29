@@ -20,6 +20,16 @@ public class RidersContext : DbContext, IUnitOfWork
         _mediator = mediator;
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RiderEntity>()
+               .OwnsOne(r => r.SocialId)
+               .HasIndex(r => r.Number)
+               .IsUnique();
+
+        base.OnModelCreating(modelBuilder);
+    }
+
     public IDbContextTransaction GetCurrentTransaction() => _currentTransaction!;
 
     public bool HasActiveTransaction => _currentTransaction != null;

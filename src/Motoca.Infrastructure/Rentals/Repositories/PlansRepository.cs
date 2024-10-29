@@ -7,34 +7,34 @@ public class PlansRepository(RentalsContext context) : IPlansRepository
 {
     public IUnitOfWork UnitOfWork => context;
 
-    public async Task<ICollection<PlanEntity>> GetAllAsync()
+    public async Task<ICollection<PlanEntity>> GetAllAsync(CancellationToken cancellationToken)
     {
         var plans = await context
                             .Plans
                             .AsNoTracking()
-                            .ToListAsync();
+                            .ToListAsync(cancellationToken);
 
         return plans;
     }
 
-    public async Task<PlanEntity?> GetByEntityIdAsync(Guid entityId)
+    public async Task<PlanEntity?> GetByEntityIdAsync(Guid entityId, CancellationToken cancellationToken)
     {
         var plan = await context
                             .Plans
                             .Where(p => p.EntityId == entityId)
                             .AsNoTracking()
-                            .SingleOrDefaultAsync();
+                            .SingleOrDefaultAsync(cancellationToken);
 
         return plan;
     }
 
-    public async Task<PlanEntity?> GetByIdAsync(string planId)
+    public async Task<PlanEntity?> GetByIdAsync(string planId, CancellationToken cancellationToken)
     {
         var plan = await context
                             .Plans
                             .Where(p => p.Id == planId)
                             .AsNoTracking()
-                            .SingleOrDefaultAsync();
+                            .SingleOrDefaultAsync(cancellationToken);
 
         return plan;
     }
