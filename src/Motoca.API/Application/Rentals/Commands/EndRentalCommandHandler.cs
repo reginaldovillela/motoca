@@ -45,6 +45,9 @@ public class EndRentalCommandHandler(ILogger<EndRentalCommandHandler> logger,
                           rentalToEnd.ExpectedEndDate,
                           rentalToEnd.ReturnDate,
                           rentalToEnd.AmountToPay,
-                          rentalToEnd.IsActive);
+                          rentalToEnd.IsActive,
+                          rentalToEnd.IsOverDue,
+                          rentalToEnd.DaysInRental,
+                          rentalToEnd.DaysOverDue);
     }
 }

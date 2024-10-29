@@ -1,5 +1,4 @@
 using Motoca.SharedKernel.Message;
-using System.Text.Json;
 
 namespace Motoca.Consumer;
 
@@ -13,9 +12,14 @@ public class BikeHasBeenCreatedMessageConsumer : IConsumer<BikeHasBeenCreatedMes
 
             if (bike.Year >= 2024)
             {
-                var bikeJson = JsonSerializer.Serialize(bike);
-
-                Console.WriteLine($"Uma nova moto foi cadastrada: {bikeJson!}");
+                Console.Clear();
+                Console.WriteLine("******");
+                Console.WriteLine("Uma nova moto foi cadastrada!");
+                Console.WriteLine($"Id: {bike.Id}");
+                Console.WriteLine($"Modelo: {bike.Model}");
+                Console.WriteLine($"Ano: {bike.Year}");
+                Console.WriteLine($"Placa: {bike.LicensePlate}");
+                Console.WriteLine("******");
             }
         });
     }

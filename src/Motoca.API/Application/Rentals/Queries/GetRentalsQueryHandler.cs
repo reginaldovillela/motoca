@@ -31,7 +31,10 @@ public class GetRentalsQueryHandler(ILogger<GetRentalsQueryHandler> logger,
                               r.ExpectedEndDate,
                               r.ReturnDate,
                               r.AmountToPay,
-                              r.IsActive);
+                              r.IsActive,
+                              r.IsOverDue,
+                              r.DaysInRental,
+                              r.DaysOverDue);
         }).ToList();
     }
 }

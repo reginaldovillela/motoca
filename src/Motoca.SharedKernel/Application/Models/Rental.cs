@@ -15,7 +15,10 @@ namespace Motoca.SharedKernel.Application.Models;
 /// <param name="ExpectedEndDate">Data previsão da locação</param>
 /// <param name="ReturnDate">Data/Hora devolução da locação</param>
 /// <param name="AmountToPay">Total a pagar</param>
-/// <param name="IsActive">Se a ocação está ativa ou não</param>
+/// <param name="IsActive">Se a locação está ativa ou não</param>
+/// <param name="IsOverDue">Se a locação está atrasada ou não</param>
+/// <param name="DaysInRental">Dias em Locação</param>
+/// <param name="DaysInOverDue">Dias em atraso</param>
 [DisplayName("Locação > Dados Cadastrados")]
 public record Rental(
     Guid InternalId,
@@ -28,5 +31,8 @@ public record Rental(
     [property: JsonPropertyName("data_previsao_termino"), DefaultDateTime, Required] DateTime ExpectedEndDate,
     [property: JsonPropertyName("data_devolucao"), DefaultDateTime] DateTime? ReturnDate,
     [property: JsonPropertyName("total_pagar"), DefaultValue(0), Required] decimal AmountToPay,
-    [property: JsonPropertyName("ativo"), DefaultValue(false), Required] bool IsActive
+    [property: JsonPropertyName("ativo"), DefaultValue(false), Required] bool IsActive,
+    [property: JsonPropertyName("atrasado"), DefaultValue(false), Required] bool IsOverDue,
+    [property: JsonPropertyName("dias_em_locacao"), DefaultValue(0), Required] ushort DaysInRental,
+    [property: JsonPropertyName("dias_em_atraso"), DefaultValue(0), Required] ushort DaysInOverDue
 ) : Base(InternalId);

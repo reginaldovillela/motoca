@@ -91,6 +91,9 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
                           newRental.ExpectedEndDate,
                           newRental.ReturnDate,
                           newRental.AmountToPay,
-                          newRental.IsActive);
+                          newRental.IsActive,
+                          newRental.IsOverDue,
+                          newRental.DaysInRental,
+                          newRental.DaysOverDue);
     }
 }

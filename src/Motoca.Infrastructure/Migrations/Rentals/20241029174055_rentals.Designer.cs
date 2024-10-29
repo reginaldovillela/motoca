@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Motoca.Infrastructure.Migrations.Rentals
 {
     [DbContext(typeof(RentalsContext))]
-    [Migration("20241028195847_rentals")]
+    [Migration("20241029174055_rentals")]
     partial class rentals
     {
         /// <inheritdoc />
@@ -70,6 +70,9 @@ namespace Motoca.Infrastructure.Migrations.Rentals
                         .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreateAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpectedEndDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Id")

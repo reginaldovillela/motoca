@@ -36,6 +36,7 @@ namespace Motoca.Infrastructure.Migrations.Rentals
                     BikeId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExpectedEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     AmountToPay = table.Column<decimal>(type: "decimal", nullable: false),
                     PlanEntityId = table.Column<Guid>(type: "uuid", nullable: false)
