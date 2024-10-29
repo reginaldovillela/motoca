@@ -9,9 +9,9 @@ public class GetRidersQueryHandler(ILogger<GetRidersQueryHandler> logger,
 {
     public async Task<Rider[]> Handle(GetRidersQuery request, CancellationToken cancellationToken)
     {
-        var riders = await repository.GetAllAsync();
+        var riders = await repository.GetAllAsync(cancellationToken);
 
-         logger.LogInformation("Consulta concluída. Total de {@count} encontrados", riders.Count);
+         logger.LogInformation("Consulta concluída. Total de {@Count} encontrados", riders.Count);
 
         return riders.Select(r => new Rider(r.EntityId, 
                                             r.Id, 

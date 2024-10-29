@@ -7,7 +7,7 @@ services:
       - Broker__Host=rabbitmq
       - ConnectionStrings__MotocaConnection=Host=db;Username=postgres;Password=postgres;Database=motoca
     ports:
-      - 80:8080
+      - 8080
       #- "8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro

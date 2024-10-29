@@ -43,7 +43,6 @@ public class RentalEntity
 
     [Column(TypeName = "decimal")]
     [Required]
-    //[Precision(10, 2)]
     public decimal AmountToPay { get; private set; }
 
     public bool IsActive => CalculateIsActive();
@@ -82,7 +81,7 @@ public class RentalEntity
 
     private string DefineRentalId()
     {
-        return $"{RiderId}-{BikeId}-{CreateAt:yyyyMMdd-hh:mm}";
+        return $"{RiderId}-{BikeId}-{CreateAt:yyyyMMddhhmmss}";
     }
 
     private DateTime CalculateExpectedEndDate()
@@ -122,7 +121,7 @@ public class RentalEntity
             return 0;
 
         var vpp = Plan.ValuePerDay;
-        var returnDate = ReturnDate ??= DateTime.UtcNow.LastTimeOfDay();
+        var returnDate = ReturnDate ?? DateTime.UtcNow.LastTimeOfDay();
         var totalDaysDefault = (int)(ExpectedEndDate - StartDate).TotalDays;
         var totalDaysInRental = (int)(returnDate - StartDate).TotalDays;
         var penaltyPercent = Plan.PenaltyPercent / 100 * 1;
@@ -137,11 +136,11 @@ public class RentalEntity
 
         // devolvido e não atradado
         if (!IsActive && !IsOverDue)
-            return (totalDaysDefault * vpp) + (DaysOverDue * PenaltyValuePerDay);
+            return (totalDaysInRental * vpp) + ((totalDaysDefault - totalDaysInRental) * penaltyPercent);
 
         // devolvido e atrasado
         if (!IsActive && IsOverDue)
-            return (totalDaysInRental * vpp) + ((totalDaysDefault - totalDaysInRental) * penaltyPercent);
+            return (totalDaysDefault * vpp) + (DaysOverDue * PenaltyValuePerDay);
 
         return 0;
     }
@@ -152,5 +151,11 @@ public class RentalEntity
         AmountToPay = CalculateAmountToPay();
 
         return true;
+    }
+
+    public void Recalculate()
+    {
+        if (IsActive && AmountToPay == 0)
+            AmountToPay = CalculateAmountToPay();
     }
 }

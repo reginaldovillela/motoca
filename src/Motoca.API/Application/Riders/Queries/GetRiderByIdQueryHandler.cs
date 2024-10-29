@@ -10,7 +10,7 @@ public class GetRiderByIdQueryHandler(ILogger<GetRiderByIdQueryHandler> logger,
 {
     public async Task<Rider?> Handle(GetRiderByIdQuery request, CancellationToken cancellationToken)
     {
-        var rider = await repository.GetByIdAsync(request.Id);
+        var rider = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (rider is null)
         {

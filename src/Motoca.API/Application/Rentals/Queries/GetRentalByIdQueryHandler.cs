@@ -9,13 +9,15 @@ public class GetRentalByIdQueryHandler(ILogger<GetRentalByIdQueryHandler> logger
 {
     public async Task<Rental?> Handle(GetRentalByIdQuery request, CancellationToken cancellationToken)
     {
-        var rental = await repository.GetByIdAsync(request.Id);
+        var rental = await repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (rental is null)
         {
             logger.LogInformation("Não foi encontrada a locação com o Id: {@Id}", request.Id);
             return null;
         }
+
+        rental.Recalculate();
 
         return new Rental(rental.EntityId, 
                           rental.Id, 
@@ -24,7 +26,8 @@ public class GetRentalByIdQueryHandler(ILogger<GetRentalByIdQueryHandler> logger
                           new Plan(rental.Plan.EntityId, 
                                    rental.Plan.Id, 
                                    rental.Plan.DurationTime, 
-                                   rental.Plan.ValuePerDay), 
+                                   rental.Plan.ValuePerDay,
+                                   rental.Plan.PenaltyPercent), 
                           rental.CreateAt, 
                           rental.StartDate, 
                           rental.ExpectedEndDate, 

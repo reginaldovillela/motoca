@@ -14,7 +14,7 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
 {
     public async Task<Rental> Handle(CreateRentalCommand request, CancellationToken cancellationToken)
     {
-        var plan = await plansRepository.GetByIdAsync(request.PlanId);
+        var plan = await plansRepository.GetByIdAsync(request.PlanId, cancellationToken);
 
         if (plan is null)
         {
@@ -35,7 +35,7 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
         }
 
         // Verifica se a moto já está alugada
-        var bikeHasAlreadyRentaled =  await rentalsRepository.BikeHasAlreadyRentaled(messageBike.Bike.Id);
+        var bikeHasAlreadyRentaled =  await rentalsRepository.BikeHasAlreadyRentaled(messageBike.Bike.Id, cancellationToken);
 
         if (bikeHasAlreadyRentaled is not null)
         {
@@ -56,7 +56,7 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
         }
 
          // Verifica se o entregador já tem um aluguél ativos
-        var riderHasAActiveRental =  await rentalsRepository.RiderHasAActiveRental(messageRider.Rider.Id);
+        var riderHasAActiveRental =  await rentalsRepository.RiderHasAActiveRental(messageRider.Rider.Id, cancellationToken);
 
         if (riderHasAActiveRental is not null)
         {
@@ -73,7 +73,7 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
 
         var newRental = new RentalEntity(request.RiderId, request.BikeId, plan);
 
-        _ = await rentalsRepository.AddAsync(newRental);
+        _ = await rentalsRepository.AddAsync(newRental, cancellationToken);
 
         _ = await rentalsRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -84,7 +84,8 @@ public class CreateRentalCommandHandler(ILogger<CreateRentalCommandHandler> logg
                           new Plan(newRental.Plan.EntityId,
                                    newRental.Plan.Id,
                                    newRental.Plan.DurationTime,
-                                   newRental.Plan.ValuePerDay),
+                                   newRental.Plan.ValuePerDay,
+                                   newRental.Plan.PenaltyPercent),
                           newRental.CreateAt,
                           newRental.StartDate,
                           newRental.ExpectedEndDate,

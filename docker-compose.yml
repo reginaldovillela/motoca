@@ -38,11 +38,11 @@ services:
     build:
       context: .
       dockerfile: src/Motoca.API/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-    ports:
-      - 80:8080
+    # environment:
+    #   - ASPNETCORE_ENVIRONMENT=Development
+    #   - ASPNETCORE_HTTP_PORTS=8080
+    # ports:
+    #   - 80:8080
     depends_on:
       db:
         condition: service_healthy

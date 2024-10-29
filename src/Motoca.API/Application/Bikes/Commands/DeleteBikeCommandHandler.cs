@@ -1,12 +1,15 @@
-using System.Data;
+using MassTransit;
 using Motoca.Domain.Bikes.AggregatesModel;
 using Motoca.SharedKernel.Application.Models;
+using Motoca.SharedKernel.Message;
+using System.Data;
 
 namespace Motoca.API.Application.Bikes.Commands;
 
 #pragma warning disable 1591
 public class DeleteBikeCommandHandler(ILogger<DeleteBikeCommandHandler> logger,
-                                      IBikesRepository repository) : IRequestHandler<DeleteBikeCommand, Bike?>
+                                      IBikesRepository repository,
+                                      IRequestClient<GetBikeHasRentalsRequest> bikeRentalsConsumer) : IRequestHandler<DeleteBikeCommand, Bike?>
 {
     public async Task<Bike?> Handle(DeleteBikeCommand request, CancellationToken cancellationToken)
     {
@@ -18,17 +21,19 @@ public class DeleteBikeCommandHandler(ILogger<DeleteBikeCommandHandler> logger,
             return null;
         }
 
-        //Todo: Já o serviço de locações
+        // Verificar se a moto possui historico de agendamento
+        var getBikeRentalsRequest = new GetBikeHasRentalsRequest { BikeId = request.Id };
+        var getBikeRentalsResponse = await bikeRentalsConsumer.GetResponse<GetBikeHasRentalsResponse>(getBikeRentalsRequest, cancellationToken);
 
-        var hasAnyRentals = false;
+        var messageBikeRentals = getBikeRentalsResponse.Message;
 
-        if (hasAnyRentals)
+        if (messageBikeRentals.HasRentals)
         {
-            logger.LogInformation("Moto com o Id {@Id} já possui locações e não pode ser removida", request.Id);
-            throw new ConstraintException($"Moto com o Id {request.Id} já possui locações e não pode ser removida");
+            logger.LogInformation("Moto com o Id {@Id} já possui histórico de locações e não pode ser removida", request.Id);
+            throw new ConstraintException($"Moto com o Id {request.Id} já possui histórico locações e não pode ser removida");
         }
 
-        logger.LogInformation("Deletando a moto: {@bike}", bikeToDelete);
+        logger.LogInformation("Deletando a moto: {@Bike}", bikeToDelete);
 
         _ = await repository.DeleteAsync(bikeToDelete, cancellationToken);
 

@@ -4,17 +4,19 @@ namespace Motoca.Domain.Rentals.AggregatesModel;
 
 public interface IRentalsRepository : IRepository<RentalEntity>
 {
-    Task<RentalEntity> AddAsync(RentalEntity rental);
+    Task<RentalEntity> AddAsync(RentalEntity rental, CancellationToken cancellationToken);
 
-    Task<RentalEntity?> BikeHasAlreadyRentaled(string bikeId);
+    Task<RentalEntity?> BikeHasAlreadyBeenRentals(string bikeId, CancellationToken cancellationToken);
 
-    Task<RentalEntity> EndRentalAsync(RentalEntity rental);
+    Task<RentalEntity?> BikeHasAlreadyRentaled(string bikeId, CancellationToken cancellationToken);
 
-    Task<ICollection<RentalEntity>> GetAllAsync();
+    Task<RentalEntity> EndRentalAsync(RentalEntity rental, CancellationToken cancellationToken);
 
-    Task<RentalEntity?> GetByEntityIdAsync(Guid entityId);
+    Task<ICollection<RentalEntity>> GetAllAsync(CancellationToken cancellationToken);
 
-    Task<RentalEntity?> GetByIdAsync(string rentalId);
+    Task<RentalEntity?> GetByEntityIdAsync(Guid entityId, CancellationToken cancellationToken);
 
-    Task<RentalEntity?> RiderHasAActiveRental(string riderId);
+    Task<RentalEntity?> GetByIdAsync(string rentalId, CancellationToken cancellationToken);
+
+    Task<RentalEntity?> RiderHasAActiveRental(string riderId, CancellationToken cancellationToken);
 }

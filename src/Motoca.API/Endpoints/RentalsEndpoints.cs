@@ -1,5 +1,6 @@
 using Motoca.API.Application.Rentals.Commands;
 using Motoca.API.Application.Rentals.Queries;
+using Motoca.API.Filters;
 using Motoca.API.Models.Results;
 using Motoca.SharedKernel.Application.Models;
 
@@ -24,22 +25,31 @@ public static class RentalsEndpoints
         var api = app.MapGroup(BaseEndpoint)
                      .WithTags(TagEndpoint);
 
-        api.MapGet("/", GetRentalsAsync);
+        api.MapGet("/", GetRentalsAsync)
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
 
-        api.MapGet("/{id}", GetRentalByIdAsync);
+        api.MapGet("/{id}", GetRentalByIdAsync)
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
 
-        api.MapPost("/", CreateRentalAsync);
+        api.MapPost("/", CreateRentalAsync)
+            .AddEndpointFilter<ValidationFilter<CreateRentalCommand>>()
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable)
+            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);
 
-        api.MapPut("/{id}/devolucao", EndRentalAsync);
+        api.MapPut("/{id}/devolucao", EndRentalAsync)
+            .AddEndpointFilter<ValidationFilter<EndRentalCommand>>()
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable)
+            .ProducesValidationProblem((int)HttpStatusCode.UnprocessableEntity);
 
-        api.MapGet("/planos", GetPlansAsync);
+        api.MapGet("/planos", GetPlansAsync)
+            .ProducesProblem((int)HttpStatusCode.NotAcceptable);
     }
 
     /// <summary>
     /// Consulta todas as locações no sistema
     /// </summary>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Rental[]>,
+    private static async Task<Results<Ok<ICollection<Rental>>,
                               NotFound<AnyFailureResult>,
                               BadRequest<AnyFailureResult>>> GetRentalsAsync(
         [AsParameters] RentalsEndpointsServices services)
@@ -49,7 +59,7 @@ public static class RentalsEndpoints
             var query = new GetRentalsQuery();
             var rentals = await services.Mediator.Send(query);
 
-            if (rentals is null || rentals.Length == 0)
+            if (rentals is null || rentals.Count == 0)
                 return TypedResults.NotFound(new AnyFailureResult("Dados inválidos", "Não encontramos nenhuma locação cadastrada no sistema"));
 
             return TypedResults.Ok(rentals);
@@ -145,7 +155,7 @@ public static class RentalsEndpoints
     /// Busca todos os planos cadastrados no sistema
     /// </summary>
     /// <param name="services"></param>
-    private static async Task<Results<Ok<Plan[]>,
+    private static async Task<Results<Ok<ICollection<Plan>>,
                                       NotFound<AnyFailureResult>,
                                       BadRequest<AnyFailureResult>>> GetPlansAsync(
        [AsParameters] RentalsEndpointsServices services)
