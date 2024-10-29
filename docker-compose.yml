@@ -51,3 +51,16 @@ services:
     links:
       - db
       - broker
+
+  consumer:
+    container_name: consumer
+    image: ${DOCKER_REGISTRY-}motoca-consumer
+    build:
+      context: .
+      dockerfile: src/Motoca.Consumer/Dockerfile
+    depends_on:
+      broker:
+        condition: service_healthy
+    links:
+      - broker
+
